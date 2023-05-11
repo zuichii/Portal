@@ -1,0 +1,122 @@
+/*UTILITIES CODE*/
+a{
+    text-decoration: none;
+}
+li{
+    list-style: none;
+}
+
+
+
+
+li:not(:last-child) {
+    margin-bottom: 1em;
+}
+
+
+aside{
+    flex: 1;
+    margin-right: 50px;
+}
+
+
+
+
+
+
+/*HEADER CODE*/
+
+
+
+
+header{
+    background-color: teal;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    height: 100px;
+}
+
+
+.topNav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+
+.topNavMenu{
+    display: flex;
+    gap: 1em;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+img#homeLogo{
+    width:50px;
+    height:50px;
+}
+
+
+
+
+
+
+/*MAIN CODE*/
+
+
+main{
+    position:relative;
+
+}
+
+
+.container{
+    margin-top: 250px;
+    margin-right:50px;
+    margin-left:50px;
+    margin-bottom:100px;
+    gap: 10em;
+    display: flex;
+
+}
+
+
+
+
+.mainContent{
+    margin-right:50px;
+
+}
+
+
+.post{
+    width: 500em;;
+    margin-right: 10px;
+    border-color: black;
+    border-width: 1em;
+    border: solid;
+}
+
+
+
+
+/*FOOTER CODE*/
+
+
+footer{
+    position: static;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 60px;
+    background: #6cf;
+}
