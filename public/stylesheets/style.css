@@ -19,6 +19,7 @@ li:not(:last-child) {
 body {
     margin: 0;
     padding: 0;
+    font-family: sans-serif;
 }
 
 
@@ -88,7 +89,6 @@ main.clubs{
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
     min-height: calc(100vh - 50px);
     background-color: #f1f1f1;
 }
@@ -98,7 +98,6 @@ main.home{
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
     gap: 10em;
     min-height: calc(100vh - 50px);
 }
@@ -127,14 +126,60 @@ main.home{
     border-width: 1em;
     border: solid;
 }
-*/
 
-#posts {
-    border: 1px solid black;
-    padding: 10px;
-    margin: 0px 10px 10px 150px;
-    min-height: 100px;
+
+#rsvp-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+
+
 }
+
+#rsvp-options {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+#rsvp-options .option {
+    background-color: #f2f2f2;
+    border: none;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+rsvp-options .option.going {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#rsvp-options .option.maybe {
+    background-color: #ff9800;
+    color: white;
+
+}
+
+#rsvp-options .option.not-going {
+    background: #f44336;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+
 
 
 
