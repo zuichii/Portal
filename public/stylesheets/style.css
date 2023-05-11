@@ -119,14 +119,26 @@ main{
 }
 
 
+<<<<<<< HEAD
 .post{
     min-width: 300px;
+=======
+/*.post{
+    width: 500em;;
+>>>>>>> a98d860a36ea3f473b652fb67a3eb06354cfb858
     margin-right: 10px;
     border-color: black;
     border-width: 1em;
     border: solid;
 }
+*/
 
+#posts {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 0px 10px 10px 150px;
+    min-height: 100px;
+}
 
 
 
@@ -134,8 +146,22 @@ main{
 
 
 footer{
+<<<<<<< HEAD
     background-color: teal;
     height: 300em;
     text-align: right;
     padding: 25px;
 }
+=======
+    position: static;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 60px;
+    background: #6cf;
+}
+
+
+/* test */
+>>>>>>> a98d860a36ea3f473b652fb67a3eb06354cfb858
