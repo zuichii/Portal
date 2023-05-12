@@ -17,9 +17,9 @@ li:not(:last-child) {
 
 
 body {
+    font-family: sans-serif;
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
 }
 
 
@@ -37,8 +37,6 @@ header{
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-    height: 100px;
-
 }
 
 .topNav{
@@ -89,6 +87,7 @@ main.clubs{
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    margin-top: 50px;
     min-height: calc(100vh - 50px);
     background-color: #f1f1f1;
 }
@@ -98,6 +97,7 @@ main.home{
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    margin-top: 50px;
     gap: 10em;
     min-height: calc(100vh - 50px);
 }
@@ -118,91 +118,15 @@ main.home{
     border: solid;
 }
 
-<<<<<<< HEAD
-.post{
-    width: 500em;;
-=======
-
 .post{
     min-width: 300px;
->>>>>>> f9e63a56153b3dacc2a1417a8ab222c32ae601be
     margin-right: 10px;
     border-color: black;
     border-width: 1em;
     border: solid;
 }
-<<<<<<< HEAD
-=======
 
 
-#rsvp-button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    display: inline-block;
-    font-size: 16px;
-    margin: 10px;
-
-
-}
->>>>>>> f9e63a56153b3dacc2a1417a8ab222c32ae601be
-
-#rsvp-options {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-}
-
-#rsvp-options .option {
-    background-color: #f2f2f2;
-    border: none;
-    color: black;
-    padding: 10px;
-    text-align: center;
-    display: block;
-    font-size: 16px;
-    margin-bottom: 5px;
-    cursor: pointer;
-}
-
-rsvp-options .option.going {
-    background-color: #4CAF50;
-    color: white;
-}
-
-#rsvp-options .option.maybe {
-    background-color: #ff9800;
-    color: white;
-
-}
-
-#rsvp-options .option.not-going {
-    background: #f44336;
-    color: white;
-}
-
-.hidden {
-    display: none;
-}
-
-
-
-
-
-/*FOOTER CODE*/
-
-
-footer{
-    background-color: teal;
-    text-align: right;
-    padding: 25px;
-}
-<<<<<<< HEAD
-
-
-/* RSVP CSS */
 #rsvp-button {
     background-color: #4CAF50;
     border: none;
@@ -256,5 +180,3 @@ rsvp-options .option.going {
 
 
 /* test */
-=======
->>>>>>> f9e63a56153b3dacc2a1417a8ab222c32ae601be
