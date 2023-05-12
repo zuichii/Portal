@@ -17,9 +17,9 @@ li:not(:last-child) {
 
 
 body {
+    font-family: sans-serif;
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
 }
 
 
@@ -37,7 +37,6 @@ header{
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-
 }
 
 .topNav{
@@ -107,6 +106,7 @@ main.clubs{
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    margin-top: 50px;
     min-height: calc(100vh - 50px);
     background-color: #f1f1f1;
 }
@@ -116,6 +116,7 @@ main.home{
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    margin-top: 50px;
     gap: 10em;
     min-height: calc(100vh - 50px);
     margin: 50px;
@@ -149,7 +150,6 @@ main.clubTemplate{
     border-width: 1em;
     border: solid;
 }
-
 
 .post{
     min-width: 300px;
@@ -212,14 +212,4 @@ rsvp-options .option.going {
 }
 
 
-
-
-
-/*FOOTER CODE*/
-
-
-footer{
-    background-color: teal;
-    text-align: right;
-    padding: 25px;
-}
+/* test */
