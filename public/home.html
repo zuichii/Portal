@@ -5,16 +5,18 @@
 
 
 <meta charset="utf-8">
-<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+<!-- <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css"> -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="/public/stylesheets/style.css" type="text/css"/>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 
 
+
 </head>
 
 
-<body class>
+<body>
 
     <header>
 
@@ -22,15 +24,13 @@
             <img id="homeLogo" src="/public/fkingtree.jpg" alt="tree home logo">
         </a>
 
-        <nav class="pure-menu pure-menu-horizontal">
-            <ul class="pure-menu-list">
-                <li class="pure-menu-item"><a href="#news">Clubs</a></li>
-                <li class="pure-menu-item"><a href="#contact">Events</a></li>
-                <li class="pure-menu-item"><a href="#about">About</a></li>
-                <li class="pure-menu-item"><input type="text" placeholder="Search.."></li>
-                <li class="pure-menu-item"><button type="submit">Login</button></li>
-            </ul>
-        </nav>
+        <ul class="topNav">
+            <li class="pure-menu-item"><a href="#news">Clubs</a></li>
+            <li class="pure-menu-item"><a href="#contact">Events</a></li>
+            <li class="pure-menu-item"><a href="#about">About</a></li>
+            <li class="pure-menu-item"><input type="text" placeholder="Search.."></li>
+            <li class="pure-menu-item"><button type="submit">Login</button></li>
+        </ul>
     </header>
 
 
@@ -43,6 +43,9 @@
             <p>subscription here</p>
             <p>subscription here</p>
             <p>subscription here</p>
+            <button type="button">Browse Channels
+                <span class="glyphicon glyphicon-plus-sign"></span>
+            </button>
         </div>
 
 
