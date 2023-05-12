@@ -1,4 +1,8 @@
 /*UTILITIES CODE*/
+html{
+    height: 100%;
+}
+
 a{
     text-decoration: none;
 }
@@ -7,18 +11,16 @@ li{
 }
 
 
-
-
 li:not(:last-child) {
     margin-bottom: 1em;
 }
 
 
-aside{
-    flex: 1;
-    margin-right: 50px;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
 }
-
 
 
 
@@ -31,37 +33,26 @@ aside{
 
 header{
     background-color: teal;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    left: 0px;
-    height: 100px;
-}
-
-
-.topNav{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 10px;
+    height: 100px;
+
 }
 
-
-.topNavMenu{
+.topNav{
     display: flex;
     gap: 1em;
     font-size: 18px;
 }
 
 
-
-
-
-
-
 img#homeLogo{
     width:50px;
     height:50px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 
@@ -72,38 +63,131 @@ img#homeLogo{
 /*MAIN CODE*/
 
 
-main{
-    position:relative;
 
+
+
+.category {
+    width: 300px;
+    height: 300px;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.category:hover {
+    transform: scale(1.05);
 }
 
 
-.container{
-    margin-top: 250px;
-    margin-right:50px;
-    margin-left:50px;
-    margin-bottom:100px;
-    gap: 10em;
+main.clubs{
     display: flex;
-
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 50px);
+    background-color: #f1f1f1;
 }
 
-
+main.home{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10em;
+    min-height: calc(100vh - 50px);
+}
 
 
 .mainContent{
     margin-right:50px;
+    border-color: black;
+    border-width: 1em;
+    border: solid;
+    position: static;
 
 }
 
+.subscriptions{
+    border-color: black;
+    border-width: 1em;
+    border: solid;
+}
 
+<<<<<<< HEAD
 .post{
     width: 500em;;
+=======
+
+.post{
+    min-width: 300px;
+>>>>>>> f9e63a56153b3dacc2a1417a8ab222c32ae601be
     margin-right: 10px;
     border-color: black;
     border-width: 1em;
     border: solid;
 }
+<<<<<<< HEAD
+=======
+
+
+#rsvp-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+
+
+}
+>>>>>>> f9e63a56153b3dacc2a1417a8ab222c32ae601be
+
+#rsvp-options {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+#rsvp-options .option {
+    background-color: #f2f2f2;
+    border: none;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+rsvp-options .option.going {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#rsvp-options .option.maybe {
+    background-color: #ff9800;
+    color: white;
+
+}
+
+#rsvp-options .option.not-going {
+    background: #f44336;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+
 
 
 
@@ -111,14 +195,11 @@ main{
 
 
 footer{
-    position: static;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 60px;
-    background: #6cf;
+    background-color: teal;
+    text-align: right;
+    padding: 25px;
 }
+<<<<<<< HEAD
 
 
 /* RSVP CSS */
@@ -175,3 +256,5 @@ rsvp-options .option.going {
 
 
 /* test */
+=======
+>>>>>>> f9e63a56153b3dacc2a1417a8ab222c32ae601be

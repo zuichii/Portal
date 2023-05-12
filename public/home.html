@@ -5,74 +5,75 @@
 
 
 <meta charset="utf-8">
-<link rel="stylesheet" href="/stylesheets/style.css"  type="text/css"/>
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+<link rel="stylesheet" href="/public/stylesheets/style.css" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 
 
 </head>
 
 
-<body>
+<body class>
+
     <header>
 
-        <div class="topNav">
-            <a href="index.html">
-                <img id="homeLogo" src="fkingtree.jpg" alt="tree home logo">
-            </a>
+        <a href="index.html">
+            <img id="homeLogo" src="/public/fkingtree.jpg" alt="tree home logo">
+        </a>
 
-
-            <ul class="topNavMenu">
-                <li><a href="#news">Clubs</a></li>
-                <li><a href="#contact">Events</a></li>
-                <li><a href="#about">About</a></li>
-                <li><input type="text" placeholder="Search.."></li>
-                <li><button type="submit">Login</button></li>
+        <nav class="pure-menu pure-menu-horizontal">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="#news">Clubs</a></li>
+                <li class="pure-menu-item"><a href="#contact">Events</a></li>
+                <li class="pure-menu-item"><a href="#about">About</a></li>
+                <li class="pure-menu-item"><input type="text" placeholder="Search.."></li>
+                <li class="pure-menu-item"><button type="submit">Login</button></li>
             </ul>
-        </div>
-
-
-
+        </nav>
     </header>
 
 
 
-    <main>
-        <div class="container">
+    <main class="home">
 
-
-            <aside>
-                <h3>subscriptions</h3>
-                <p>subscription here</p>
-                <p>subscription here</p>
-                <p>subscription here</p>
-                <p>subscription here</p>
-            </aside>
-
-
-            <div class="mainContent">
-                <h1>news and updates</h1>
-                <ul class="mainPosts" style>
-                    <li>
-                        <div class="post">
-
-                        <h3>Post Name</h3>
-                        <h4>Post Author and Time</h4>
-
-                        <li>Post Content</li>
-                        <button id="rsvp-button">RSVP</button>
-                        <div id="rsvp-options" class="hidden">
-                        <button class="going">Going</button>
-                        <button class="maybe">Maybe</button>
-                        <button class="not-going">Not Going</button>
-                        </div>
-                        </div>
-                    </li>
-
-                </ul>
-
-            </div>
-
+        <div class="subscriptions">
+            <h3>subscriptions</h3>
+            <p>subscription here</p>
+            <p>subscription here</p>
+            <p>subscription here</p>
+            <p>subscription here</p>
         </div>
 
+
+        <div class="mainContent">
+            <h1>news and updates</h1>
+            <ul class="mainPosts" style>
+                <li>
+                    <div class="post">
+                        <h2>post title</h2>
+                        <h3>date and author</h3>
+                        <p>post content goes here</p>
+                        <p>post content goes here</p>
+                        <p>post content goes here</p>
+                        <p>post content goes here</p>
+                        <p>post content goes here</p>
+                            <button id="rsvp-button" type="button">RSVP</button>
+                            <div id="rsvp-options" class="hidden">
+                            <button class="going" type="button">Going</button>
+                            <button class="maybe" type="button">Maybe</button>
+                            <button class="not-going" type="button">Not Going</button>
+                        </div>
+                    </div>
+                </li>
+
+
+                <li><div class="post">post here</div></li>
+                <li><div class="post">post here</div></li>
+                <li><div class="post">post here</div></li>
+            </ul>
+
+        </div>
 
     </main>
 
@@ -92,7 +93,7 @@
 
 
 
-    <script src="script.js"></script>
+    <script src="/public/scripts/script.js"></script>
 </body>
 
 
