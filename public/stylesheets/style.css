@@ -32,7 +32,7 @@ body {
 
 
 header{
-    background-color: teal;
+    background-color: rgb(255, 183, 129);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -45,6 +45,9 @@ header{
     font-size: 18px;
 }
 
+.topNav a {
+    color: saddlebrown;
+}
 
 img#homeLogo{
     width:50px;
