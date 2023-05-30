@@ -1,23 +1,9 @@
 /*UTILITIES CODE*/
-html{
-    height: 100%;
-}
 
-a{
-    text-decoration: none;
-}
-li{
-    list-style: none;
-}
-
-
-li:not(:last-child) {
-    margin-bottom: 1em;
-}
 
 
 body {
-    font-family: sans-serif;
+    font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -31,30 +17,49 @@ body {
 
 
 
-header{
+.topnav {
     background-color: rgb(255, 183, 129);
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .topnav-left {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-}
+  }
 
-.topNav{
+  .logo img {
+    display: block;
+    width: 50px;
+    height: auto;
+    padding: 5px;
+  }
+
+  .topnav-right {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
     display: flex;
-    gap: 1em;
-    font-size: 18px;
-}
+  }
 
-.topNav a {
+  .topnav-right li {
+    margin-left: 10px;
+  }
+
+  .topnav-right li a {
+    display: block;
+    color: #fff;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+
+  .topnav-right li a:hover {
     color: saddlebrown;
-}
-
-img#homeLogo{
-    width:50px;
-    height:50px;
-    margin-top: auto;
-    margin-bottom: auto;
-}
+  }
 
 
 
@@ -114,16 +119,15 @@ main.clubs{
     background-color: #f1f1f1;
 }
 
-main.home{
+main.home {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+    align-items:baseline;
     margin-top: 50px;
-    gap: 10em;
+    gap: 5em;
     min-height: calc(100vh - 50px);
-    margin: 50px;
-}
+  }
 
 
 
@@ -138,30 +142,34 @@ main.clubTemplate{
 
 }
 
-
 .mainContent{
-    margin-right:50px;
-    border-color: black;
-    border-width: 1em;
-    border: solid;
-    position: static;
-
-}
+    max-width: 70%;
+  }
 
 .subscriptions{
-    border-color: black;
-    border-width: 1em;
-    border: solid;
+    max-width: 20%;
+    border-color: #33333333;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
 }
-
 .post{
-    min-width: 300px;
-    margin-right: 10px;
-    border-color: black;
-    border-width: 1em;
-    border: solid;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    border-width: 0.1px;
+    border-color: #33333333 ;
+    border-style: solid;
+    border-radius: 3px;
+    padding: 10px;
 }
-
+.newsHeader{
+    display:flex;
+    align-items: center;
+    gap: 2em;
+  }
 
 #rsvp-button {
     background-color: #4CAF50;
