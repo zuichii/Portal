@@ -4,24 +4,43 @@
 <head>
 <title>explore page</title>
 <meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+        integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
 <link rel="stylesheet" href="/public/stylesheets/style.css" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 
 
 
 <body>
 
-    <header>
-        <a href="">
-            <img id="homeLogo" src="/public/tree.jpg" alt="tree home logo">
-        </a>
+    <header class="pure-menu pure-menu-horizontal topnav">
+        <div class="pure-menu pure-menu-horizontal topnav-left">
+            <a href="#" class="pure-menu-heading logo"><img src="tree.jpg" alt="Home logo"></a>
+        </div>
 
-        <ul class="topNav">
-            <li><a href="/news">Clubs</a></li>
-            <li><a href="/contact">Events</a></li>
-            <li><a href="/about">About</a></li>
-            <li><input type="text" placeholder="Search..."></li>
-            <li><button type="submit">Login</button></li>
+        <ul class="pure-menu-list topnav-right">
+            <li class="pure-menu-item">
+                <a href="#">Clubs</a>
+            </li>
+            <li class="pure-menu-item">
+                <a href="#">Events</a>
+            </li>
+            <li class="pure-menu-item">
+                <a href="#">About</a>
+            </li>
+
+            <li class="pure-menu-item">
+                <form class="pure-form">
+                    <input type="text" class="pure-input-rounded" />
+
+                </form>
+            </li>
+            <li class="pure-menu-item">
+                <a class="pure-button pure-button-primary" href="#">Login</a>
+            </li>
+
         </ul>
     </header>
 
