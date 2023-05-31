@@ -84,9 +84,12 @@ body {
 .heroSocials{
     position:absolute;
     bottom: 0;
-    background-color: white;
+    right: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
     margin: 10px;
-    align-content: left;
 }
 
 
@@ -135,7 +138,7 @@ main.clubTemplate{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
+    align-items:baseline;
     gap: 10em;
     min-height: calc(100vh - 50px);
     margin: 50px;
