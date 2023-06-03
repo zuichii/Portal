@@ -15,7 +15,7 @@ router.post('/signin', function(req, res) {
     }
     var username = req.body.username;
     var password = req.body.password;
-    var query = "SELECT * FROM users WHERE username = ? AND password = ?";
+    var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
     connection.query(query, [username, password], function(qerr, results) {
       connection.release();
       if(qerr){
