@@ -132,6 +132,12 @@ main.home {
   min-height: calc(100vh - 50px);
 }
 
+main.about {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 
 
 main.clubTemplate{
