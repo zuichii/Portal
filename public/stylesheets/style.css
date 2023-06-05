@@ -95,8 +95,8 @@ height:400px;
 
 
 .category {
-  width: 300px;
-  height: 300px;
+  width: 100px;
+  height: 100px;;
   margin: 20px;
   padding: 20px;
   border-radius: 20px;
@@ -112,13 +112,18 @@ height:400px;
 }
 
 
-main.clubs{
+main.explore_events{
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content:baseline;
   align-items: center;
-  margin-top: 50px;
-  min-height: calc(100vh - 50px);
+  background-color: #f1f1f1;
+}
+main.explore_clubs{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:baseline;
+  align-items: center;
   background-color: #f1f1f1;
 }
 
