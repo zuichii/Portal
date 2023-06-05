@@ -189,8 +189,6 @@ main.clubTemplate{
   display: inline-block;
   font-size: 16px;
   margin: 10px;
-
-
 }
 
 #rsvp-options {
@@ -231,5 +229,40 @@ rsvp-options .option.going {
   display: none;
 }
 
+.container1 {
+  margin: auto;
+  width: 50%;
+  border: 2px solid #f2f0f0;
+  display: block;
+  float: none;
+  padding: 26px;
+}
+
+.signin {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.rmb {
+  width: 100%;
+  padding: 10px 2px;
+  display: inline-block;
+}
+
+.small {
+  font-size: small;
+}
+
+#lost_psw {
+  float: right;
+}
+
+#login_form {
+  padding: 50px 0;
+}
 
 /* test */
