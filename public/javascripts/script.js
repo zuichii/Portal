@@ -18,6 +18,16 @@ function postEvent(){
 
 }
 
+// show sign up or login
+function showSignUp() {
+    let login = document.getElementById("login");
+    let signup = document.getElementById("signup");
+    login.style.display = "none";
+    signup.style.display = "block";
+}
+
+document.getElementById("switch_signup").onclick = showSignUp;
+
 const rsvpButton = document.getElementById('rsvp-button');
 const rsvpOptions = document.getElementsById('srvp-options');
 
@@ -27,8 +37,9 @@ rsvpButton.addEventListener('click', () => {
 
 const optionButtons = document.querySelectorAll('.option');
 
-optionButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        alert('You clicked ${button.textContent}!');
-    });
-});
+// cooked code, finish pls
+// optionButtons.forEach(button => {
+//     button.addEventListener('click', () => {
+//         alert('You clicked ${button.textContent}!');
+//     });
+// });
