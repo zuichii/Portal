@@ -326,16 +326,6 @@ rsvp-options .option.going {
   display: inline-block;
 }
 
-/*
-.show {
-  display: block;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
   display: none;
