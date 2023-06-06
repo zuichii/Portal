@@ -18,7 +18,7 @@ function postEvent(){
 
 }
 
-// show sign up or login
+// show sign up or login for login.html
 function showSignUp() {
     let login = document.getElementById("login");
     let signup = document.getElementById("signup");
@@ -27,6 +27,11 @@ function showSignUp() {
 }
 
 document.getElementById("switch_signup").onclick = showSignUp;
+
+// show filters for home.html
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
 
 const rsvpButton = document.getElementById('rsvp-button');
 const rsvpOptions = document.getElementsById('rsvp-options');
