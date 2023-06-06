@@ -9,6 +9,7 @@ function getClubProfile(clubId) {
 
       document.getElementById('clubName').innerText = clubData.club_name;
       document.getElementById('clubStats').innerText = '@' + clubData.club_name + ' ' + clubData.num_members + ' MEMBERS ' + clubData.num_posts + ' POSTS';
+      document.getElementById('clubLogo').src = "/public/images/" + clubData.clubname + ".jpg";
     }
   };
   xhttp.send();
