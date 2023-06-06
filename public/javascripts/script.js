@@ -29,15 +29,15 @@ function showSignUp() {
 document.getElementById("switch_signup").onclick = showSignUp;
 
 const rsvpButton = document.getElementById('rsvp-button');
-const rsvpOptions = document.getElementsById('srvp-options');
+const rsvpOptions = document.getElementsById('rsvp-options');
 
 rsvpButton.addEventListener('click', () => {
     rsvpOptions.classList.toggle('hidden');
 });
 
-const optionButtons = document.querySelectorAll('.option');
-
 // cooked code, finish pls
+// const optionButtons = document.querySelectorAll('.option');
+
 // optionButtons.forEach(button => {
 //     button.addEventListener('click', () => {
 //         alert('You clicked ${button.textContent}!');
