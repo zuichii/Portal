@@ -31,4 +31,81 @@ router.post('/signin', function(req, res) {
   });
 });
 
+
+
+
+router.get('/club_profile', function(req, res, next) {
+  var clubId = req.query.id;
+
+  req.pool.getConnection(function(err, connection) {
+    if (err) {
+      res.sendStatus(500);
+      return;
+    }
+
+    // get club data
+    var clubQuery = "SELECT club_name, club_description FROM clubs WHERE club_id = ?";
+    connection.query(clubQuery, [clubId], function(qerr, clubRows) {
+      if (qerr) {
+        connection.release();
+        res.sendStatus(500);
+        return;
+      }
+
+      if (clubRows.length > 0) {
+        var clubData = clubRows[0];
+
+        // get number of posts
+        var postsQuery = "SELECT COUNT(*) AS num_posts FROM posts WHERE club_id = ?";
+        connection.query(postsQuery, [clubId], function(perr, postsRows) {
+          if (perr) {
+            connection.release();
+            res.sendStatus(500);
+            return;
+          }
+
+          if (postsRows.length > 0) {
+            clubData.num_posts = postsRows[0].num_posts;
+          } else {
+            clubData.num_posts = 0;
+          }
+
+          // get number of members
+          var membersQuery = "SELECT COUNT(*) AS num_members FROM club_membership WHERE club_id = ?";
+          connection.query(membersQuery, [clubId], function(merr, membersRows) {
+            connection.release();
+            if (merr) {
+              res.sendStatus(500);
+              return;
+            }
+
+            if (membersRows.length > 0) {
+              clubData.num_members = membersRows[0].num_members;
+            } else {
+              clubData.num_members = 0;
+            }
+
+            res.json(clubData);
+          });
+        });
+      } else {
+        connection.release();
+        res.sendStatus(404);
+      }
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;
