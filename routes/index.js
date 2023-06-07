@@ -99,19 +99,56 @@ router.get('/club_profile', function(req, res, next) {
 });
 
 
+router.get('/get_posts', function(req, res, next) {
+  var clubId = req.query.id;
+
+  // Query the database to fetch posts for the given club_id
+  var query = 'SELECT * FROM post WHERE club_id = ?';
+  req.pool.query(query, [clubId], function(err, results) {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to fetch posts.' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+
+router.get('/get_events', function(req, res, next) {
+  var clubId = req.query.id;
+
+  // Query the database to fetch posts for the given club_id
+  var query = 'SELECT * FROM event WHERE club_id = ?';
+  req.pool.query(query, [clubId], function(err, results) {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to fetch events.' });
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 
 
+router.get('/get_club_description', function(req, res, next) {
+  var clubId = req.query.id;
 
-
-
-
-
-
-
-
-
-
+  // Query the database to fetch posts for the given club_id
+  var query = 'SELECT * FROM club WHERE club_id = ?';
+  req.pool.query(query, [clubId], function(err, results) {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to fetch events.' });
+    } else {
+      var clubData = {
+        club_description: results[0].club_description
+      };
+      res.json(clubData);
+    }
+  });
+});
 
 
 
