@@ -51,7 +51,7 @@ rsvpButton.addEventListener('click', () => {
 
 
 
-new Vue({
+const vueinst = new Vue({
     el: '#app',
     data: {
         name: '',
@@ -67,7 +67,7 @@ new Vue({
         createAccount() {
 
             //Password regex. Assign boolean values to check if there is capital letter and a number in the password.
-            let capitalCheck = false
+            let capitalCheck = false;
             let numberCheck = false;
 
             //If statements that checks if password has at least 10 characters
