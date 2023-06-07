@@ -32,23 +32,23 @@ router.post('/signin', function(req, res) {
 });
 
 
-
-
 router.get('/club_profile', function(req, res, next) {
   var clubId = req.query.id;
 
   req.pool.getConnection(function(err, connection) {
     if (err) {
-      res.sendStatus(500);
+      console.error('Error getting database connection:', err);
+      res.status(500).send('Internal Server Error');
       return;
     }
 
     // get club data
-    var clubQuery = "SELECT club_name, club_description FROM clubs WHERE club_id = ?";
+    var clubQuery = "SELECT club_name, club_description FROM club WHERE club_id = ?";
     connection.query(clubQuery, [clubId], function(qerr, clubRows) {
       if (qerr) {
+        console.error('Error executing club query:', qerr);
         connection.release();
-        res.sendStatus(500);
+        res.status(500).send('Internal Server Error');
         return;
       }
 
@@ -56,11 +56,12 @@ router.get('/club_profile', function(req, res, next) {
         var clubData = clubRows[0];
 
         // get number of posts
-        var postsQuery = "SELECT COUNT(*) AS num_posts FROM posts WHERE club_id = ?";
+        var postsQuery = "SELECT COUNT(*) AS num_posts FROM post WHERE club_id = ?";
         connection.query(postsQuery, [clubId], function(perr, postsRows) {
           if (perr) {
+            console.error('Error executing posts query:', perr);
             connection.release();
-            res.sendStatus(500);
+            res.status(500).send('Internal Server Error');
             return;
           }
 
@@ -75,7 +76,8 @@ router.get('/club_profile', function(req, res, next) {
           connection.query(membersQuery, [clubId], function(merr, membersRows) {
             connection.release();
             if (merr) {
-              res.sendStatus(500);
+              console.error('Error executing members query:', merr);
+              res.status(500).send('Internal Server Error');
               return;
             }
 
@@ -95,6 +97,11 @@ router.get('/club_profile', function(req, res, next) {
     });
   });
 });
+
+
+
+
+
 
 
 

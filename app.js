@@ -48,7 +48,9 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', {
+    title: 'Error' // Add this line to define the title variable
+  });
 });
 
 module.exports = app;
