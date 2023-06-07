@@ -18,6 +18,7 @@
 --
 -- Table structure for table `category`
 --
+USE bitl;
 
 DROP TABLE IF EXISTS `category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

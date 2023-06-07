@@ -4,5 +4,18 @@ CREATED DATABASE TO MATCH SCHEMA
 
 -plz just check database to see if is correct
 
--TO RESTORE A DATABASE BACKUP USE COMMAND
-'mysql < bitl.sql'
+INSTRUCTIONS TO LOAD IN A DATABASE
+in terminal cd into db folder:
+
+cd db
+mysql < dbname.sql
+
+after that then cd back into workspace and continue as normal
+cd ..
+
+
+
+
+
+-TO EXPORT A DATABASE USE COMMAND
+'mysqldump --databases bitl > bitl.sql'

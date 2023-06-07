@@ -16,18 +16,25 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Current Database: `bitl`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `bitl` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `bitl`;
+
+--
 -- Table structure for table `category`
 --
-USE bitl;
 
 DROP TABLE IF EXISTS `category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `category` (
-  `category_id` int NOT NULL AUTO_INCREMENT,
+  `category_id` int NOT NULL,
   `category_name` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +43,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'sport'),(2,'culture'),(3,'industry'),(4,'faculty');
+INSERT INTO `category` VALUES (1,'test_category_1');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,14 +55,14 @@ DROP TABLE IF EXISTS `club`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `club` (
-  `club_id` int NOT NULL AUTO_INCREMENT,
+  `club_id` int NOT NULL,
   `club_name` varchar(30) DEFAULT NULL,
-  `club_description` text,
+  `club_description` varchar(160) DEFAULT NULL,
   `category_id` int DEFAULT NULL,
   PRIMARY KEY (`club_id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `club_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +71,7 @@ CREATE TABLE `club` (
 
 LOCK TABLES `club` WRITE;
 /*!40000 ALTER TABLE `club` DISABLE KEYS */;
-INSERT INTO `club` VALUES (1,'AUMSA','We aim to create an environment where Malaysian values are embraced, diversity is celebrated, and connections are fostered between our fellow members.',2),(2,'AUVC','The Adelaide University Volleyball Club caters to all skill levels of volleyballers, from an absolute beginners to seasoned professionals through our Weekly Recreational Training, right through to our SA State League teams.',1);
+INSERT INTO `club` VALUES (1,'Club 1','Description of Club 1',1),(2,'Club 2','Description of Club 2',1),(3,'Club 3','Description of Club 3',1),(4,'Club 4','Description of Club 4',1);
 /*!40000 ALTER TABLE `club` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,6 +158,7 @@ CREATE TABLE `event` (
 
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
+INSERT INTO `event` VALUES (1,'Test event 1','2023-06-07 18:00:00','Hub Central L4','dummy text 1 dummy text 1 dummy text 1',1);
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -178,6 +186,7 @@ CREATE TABLE `post` (
 
 LOCK TABLES `post` WRITE;
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
+INSERT INTO `post` VALUES (1,'Test post 1','dummy text 1 dummy text 1 dummy text 1',1);
 /*!40000 ALTER TABLE `post` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,12 +225,14 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `user_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
   `user_name` varchar(30) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
   `password` varchar(128) DEFAULT NULL,
+  `social_media_provider` varchar(30) DEFAULT NULL,
+  `social_media_id` int DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,7 +241,6 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'dylan','a1823679@adelaide.edu.au','password'),(2,'frog','test@test.com','password');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -243,4 +253,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-07 13:58:13
+-- Dump completed on 2023-06-07 14:40:58
