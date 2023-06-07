@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const bodyParser = require('body-parser');
 // mysql use
 var mysql = require('mysql');
 
@@ -15,6 +16,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+app.use(bodyParser.json())
 
 // use database
 app.use(function(req, res, next){
@@ -49,8 +51,31 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error', {
-    title: 'Error' // Add this line to define the title variable
+    title: 'Error', // Add this line to define the title variable
   });
 });
+
+
+
+
+
+
+const users = [];
+
+
+app.post('/create-account', (req, res, next) => {
+
+    const {name, email, studentID, password, degree } = req.body;
+    users.push({
+        name,
+        email,
+        studentID,
+        password,
+        degree
+    });
+
+    res.json({ message: 'Account created!' });
+});
+
 
 module.exports = app;
