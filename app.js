@@ -58,24 +58,4 @@ app.use(function(err, req, res, next) {
 
 
 
-
-
-const users = [];
-
-
-app.post('/create-account', (req, res, next) => {
-
-    const {name, email, studentID, password, degree } = req.body;
-    users.push({
-        name,
-        email,
-        studentID,
-        password,
-        degree
-    });
-
-    res.json({ message: 'Account created!' });
-});
-
-
 module.exports = app;
