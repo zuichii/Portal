@@ -197,8 +197,8 @@ function login() {
 
   req.onreadystatechange = function() {
       if (this.readyState === 4 && this.status === 200) {
+        window.location.href = 'dashboard.html';
         alert('Logged in successfully');
-        location.href = 'home.html';
       } else if (this.status == 401) {
         alert('Login FAILED');
       }
@@ -216,7 +216,7 @@ function logout() {
   req.onreadystatechange = function(){
       if(this.readyState == 4 && this.status == 200){
           alert('Logged Out');
-          location.href = 'home.html';
+          window.location.href = 'home.html';
       } else if(this.readyState == 4 && this.status == 403){
           alert('Not logged in');
       }
