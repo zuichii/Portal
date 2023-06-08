@@ -18,16 +18,6 @@ function postEvent(){
 
 }
 
-// show sign up or login for login.html
-function showSignUp() {
-    let login = document.getElementById("login");
-    let signup = document.getElementById("signup");
-    login.style.display = "none";
-    signup.style.display = "block";
-}
-
-document.getElementById("switch_signup").onclick = showSignUp;
-
 // show filters for home.html
 function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
