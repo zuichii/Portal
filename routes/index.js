@@ -191,8 +191,8 @@ router.post('/createacc', function(req, res, next) {
 
     var insertquery = 'INSERT INTO user SET ?';
     req.pool.query(insertquery, newUser, function(ierror) {
-      if (error) {
-        console.error(error);
+      if (ierror) {
+        console.error(ierror);
         return res.sendStatus(500);
       }
 

@@ -142,15 +142,10 @@ function loadClubDescription() {
 
 
 function signup() {
-  const emailInput = document.getElementById('email');
-  const usernameInput = document.getElementById('username');
-  const passwordInput = document.getElementById('password');
-  const passwordConfirmInput = document.getElementById('passwordConfirm');
-
-  const email = emailInput.value;
-  const username = usernameInput.value;
-  const password = passwordInput.value;
-  const passwordConfirm = passwordConfirmInput.value;
+  const email = document.getElementById('email').value;
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const passwordConfirm = document.getElementById('passwordConfirm').value;
 
   // Check if any field is empty
   if (!email || !username || !password || !passwordConfirm) {
@@ -178,12 +173,10 @@ function signup() {
 
   const req = new XMLHttpRequest();
   req.onreadystatechange = function () {
-    if (req.readyState === 4) {
-      if (req.status === 200) {
-        alert('Signed up successfully');
-      } else if (req.status === 401) {
-        alert('Signed up failed');
-      }
+    if (this.readyState == 4 && this.status == 200) {
+      alert('Signed up successfully');
+    } else if (this.status === 401) {
+      alert('Signed up failed');
     }
   };
 
@@ -203,12 +196,10 @@ function login() {
   let req = new XMLHttpRequest();
 
   req.onreadystatechange = function() {
-      if (req.readyState == 4) {
-          if (req.status == 200) {
-              alert('Logged In successfully');
-          } else if (req.status == 401) {
-              alert('Login FAILED');
-          }
+      if (this.readyState === 4 && this.status === 200) {
+        alert('Logged In successfully');
+      } else if (this.status == 401) {
+        alert('Login FAILED');
       }
   };
 
@@ -224,9 +215,9 @@ function logout() {
   let req = new XMLHttpRequest();
 
   req.onreadystatechange = function(){
-      if(req.readyState == 4 && req.status == 200){
+      if(this.readyState == 4 && this.status == 200){
           alert('Logged Out');
-      } else if(req.readyState == 4 && req.status == 403){
+      } else if(this.readyState == 4 && this.status == 403){
           alert('Not logged in');
       }
   };
