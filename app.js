@@ -44,11 +44,14 @@ app.use(session({
   secure: false
 }));
 
-app.use(function(req,res,next){
-  console.log("The current user is:"+req.session.username);
+app.use(function(req, res, next) {
+  if (req.session.user) {
+    console.log("The current user is: " + req.session.user.user_name);
+  } else {
+    console.log("No user logged in");
+  }
   next();
 });
-
 
 
 

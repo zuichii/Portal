@@ -204,37 +204,38 @@ router.post('/createacc', function(req, res, next) {
 
 router.post('/login', function(req, res) {
   if ('username' in req.body && 'password' in req.body) {
-      req.pool.getConnection(function(err, connection) {
-          if (err) {
-              res.sendStatus(500);
-              return;
-          }
+    req.pool.getConnection(function(err, connection) {
+      if (err) {
+        res.sendStatus(500);
+        return;
+      }
 
-          var { username, password } = req.body;
-          var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
+      var { username, password } = req.body;
+      var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
 
-          connection.query(query, [username, password], function(qerr, results) {
-              connection.release();
+      connection.query(query, [username, password], function(qerr, results) {
+        connection.release();
 
-              if (qerr) {
-                  res.sendStatus(500);
-                  return;
-              }
+        if (qerr) {
+          res.sendStatus(500);
+          return;
+        }
 
-              if (results.length === 1) {
-                  var user = results[0];
-                  req.session.user = user;
-                  console.log(user.user_name);
-                  res.json(user);
-              } else {
-                  res.sendStatus(401);
-              }
-          });
+        if (results.length === 1) {
+          var user = results[0];
+          req.session.user = user;
+          console.log("User logged in:", user.user_name);
+          res.json(user);
+        } else {
+          res.sendStatus(401);
+        }
       });
+    });
   } else {
-      res.sendStatus(401);
+    res.sendStatus(401);
   }
 });
+
 
 
 

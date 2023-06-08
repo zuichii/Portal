@@ -138,3 +138,81 @@ function loadClubDescription() {
   xhttp.open('GET', '/get_club_description?id=' + clubId, true);
   xhttp.send();
 }
+
+
+
+function signup() {
+  const emailInput = document.getElementById('email');
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('password');
+  const passwordConfirmInput = document.getElementById('passwordConfirm');
+
+  const email = emailInput.value;
+  const username = usernameInput.value;
+  const password = passwordInput.value;
+  const passwordConfirm = passwordConfirmInput.value;
+
+  // Check if any field is empty
+  if (!email || !username || !password || !passwordConfirm) {
+    alert('Please fill in all fields');
+    return;
+  }
+
+  // Check if the email is valid
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert('Please enter a valid email address');
+    return;
+  }
+
+  if (password !== passwordConfirm) {
+    alert("Passwords don't match");
+    return;
+  }
+
+  const logindata = {
+    email,
+    username,
+    password
+  };
+
+  const req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (req.readyState === 4) {
+      if (req.status === 200) {
+        alert('Signed up successfully');
+      } else if (req.status === 401) {
+        alert('Signed up failed');
+      }
+    }
+  };
+
+  req.open('POST', '/createacc');
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.send(JSON.stringify(logindata));
+}
+
+
+// Updated AJAX function
+function login() {
+  let logindata = {
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value
+  };
+
+  let req = new XMLHttpRequest();
+
+  req.onreadystatechange = function() {
+      if (req.readyState == 4) {
+          if (req.status == 200) {
+              alert('Logged In successfully');
+          } else if (req.status == 401) {
+              alert('Login FAILED');
+          }
+      }
+  };
+
+  req.open('POST', '/login');
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.send(JSON.stringify(logindata));
+}
