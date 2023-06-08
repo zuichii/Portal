@@ -332,13 +332,37 @@ rsvp-options .option.going {
   position: absolute;
 }
 
-/* test */
+/* dashboard */
+.edit-input {
+  display: none;
+}
+.club-box {
+  width: 25%;
+  float: left;
+  padding: 10px;
+  box-sizing: border-box;
+}
 
+.club-box:hover {
+  cursor: pointer;
+  background-color: lightgray;
+}
 
+.event-details {
+  display: none;
+  margin-top: 10px;
+}
 
+.event-card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
 
-
-
+.event-card button {
+  margin-top: 5px;
+}
 
 
 /* create account */

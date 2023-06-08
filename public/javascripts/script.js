@@ -30,85 +30,44 @@ rsvpButton.addEventListener('click', () => {
     rsvpOptions.classList.toggle('hidden');
 });
 
-// cooked code, finish pls
-// const optionButtons = document.querySelectorAll('.option');
+// dashboard stuff
 
-// optionButtons.forEach(button => {
-//     button.addEventListener('click', () => {
-//         alert('You clicked ${button.textContent}!');
-//     });
-// });
+function toggleEditField(fieldId) {
+    var textField = document.getElementById(fieldId);
+    var inputField = document.getElementById(fieldId + "-input");
 
+    if (textField.style.display === "none") {
+        textField.style.display = "block";
+        inputField.style.display = "none";
+    } else {
+        textField.style.display = "none";
+        inputField.style.display = "block";
+    }
+}
 
-// const { createConnection } = require("net");
+function removeClub(clubId) {
+    var club = document.getElementById(clubId);
+    club.parentNode.removeChild(club);
+}
 
-// const vueinst = new Vue({
-//     el: '#app',
-//     data: {
-//       email: '',
-//       username: '',
-//       password: '',
-//       passwordConfirm: ''
-//     },
-//     methods: {
-//       signup() {
-//         const email = this.email;
-//         const username = this.username;
-//         const password = this.password;
-//         const passwordConfirm = this.passwordConfirm;
+document.addEventListener("DOMContentLoaded", function() {
+    var collapseButtons = document.querySelectorAll(".collapse-button");
 
-//         // Check if any field is empty
-//         if (!email || !username || !password || !passwordConfirm) {
-//           alert('Please fill in all fields');
-//           return;
-//         }
+    collapseButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
 
-//         // Check if the email is valid
-//         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//         if (!emailRegex.test(email)) {
-//           alert('Please enter a valid email address');
-//           return;
-//         }
+            var eventDetails = button.parentElement.nextElementSibling;
+            eventDetails.classList.toggle("show");
 
-//         if (password !== passwordConfirm) {
-//           alert("Passwords don't match");
-//           return;
-//         }
+            button.textContent = eventDetails.classList.contains("show") ? "▲" : "▼";
+        });
+    });
+});
 
-//         const logindata = {
-//           email,
-//           username,
-//           password
-//         };
-
-//         const req = new XMLHttpRequest();
-//         req.onreadystatechange = function () {
-//           if (req.readyState === 4) {
-//             if (req.status === 200) {
-//               alert('Signed up successfully');
-//             } else if (req.status === 401) {
-//               alert('Signed up failed');
-//             }
-//           }
-//         };
-
-//         req.open('POST', '/createacc');
-//         req.setRequestHeader('Content-Type', 'application/json');
-//         req.send(JSON.stringify(logindata));
-//       }
-//     }
-//   });
-
-
-
-
-
-
-// // Bind login function to form submission
-// document.querySelector('.login_form').addEventListener('submit', function(event) {
-//     event.preventDefault(); // Prevent the form from being submitted normally
-//     login(); // Call the login function to perform the AJAX request
-// });
+function toggleEventDetails(eventId) {
+    var eventDetails = document.getElementById(eventId);
+    eventDetails.style.display = (eventDetails.style.display === "none") ? "block" : "none";
+}
 
 
 

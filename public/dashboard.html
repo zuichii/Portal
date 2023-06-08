@@ -10,80 +10,7 @@
     <link rel="stylesheet" href="stylesheets/style.css" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <script src="javascripts/script.js" defer></script>
-    <script src="javascripts/ajax.js"></script>
-    <style>
-        .edit-input {
-            display: none;
-        }
-        .club-box {
-            width: 25%;
-            float: left;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .club-box:hover {
-            cursor: pointer;
-            background-color: lightgray;
-        }
-
-        .event-details {
-            display: none;
-            margin-top: 10px;
-        }
-
-        .event-card {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        .event-card button {
-            margin-top: 5px;
-        }
-    </style>
-    <script>
-        function toggleEditField(fieldId) {
-            var textField = document.getElementById(fieldId);
-            var inputField = document.getElementById(fieldId + "-input");
-
-            if (textField.style.display === "none") {
-                textField.style.display = "block";
-                inputField.style.display = "none";
-            } else {
-                textField.style.display = "none";
-                inputField.style.display = "block";
-            }
-        }
-
-        function removeClub(clubId) {
-            var club = document.getElementById(clubId);
-            club.parentNode.removeChild(club);
-        }
-
-
-        document.addEventListener("DOMContentLoaded", function() {
-
-            var collapseButtons = document.querySelectorAll(".collapse-button");
-
-            collapseButtons.forEach(function(button) {
-                button.addEventListener("click", function() {
-
-                    var eventDetails = button.parentElement.nextElementSibling;
-                    eventDetails.classList.toggle("show");
-
-
-                    button.textContent = eventDetails.classList.contains("show") ? "▲" : "▼";
-                });
-            });
-        });
-
-        function toggleEventDetails(eventId) {
-            var eventDetails = document.getElementById(eventId);
-            eventDetails.style.display = (eventDetails.style.display === "none") ? "block" : "none";
-        }
-    </script>
+    <script src="javascripts/ajax.js" defer></script>
 </head>
 <body>
     <header class="pure-menu pure-menu-horizontal topnav">
@@ -148,11 +75,8 @@
                 <!-- Add more events as needed -->
             </div>
         </div>
+        <button type="button" class="pure-button" onclick="logout()">Log out</button>
     </main>
-
-    <footer>
-        <!-- Footer content goes here -->
-    </footer>
 </body>
 </html>
 

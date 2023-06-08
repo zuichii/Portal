@@ -248,7 +248,7 @@ router.post('/login', async function(req, res) {
 router.post('/logout', function (req, res, next) {
   if ('user' in req.session) {
     delete req.session.user;
-    res.end();
+    res.sendStatus(200);
   } else {
     res.sendStatus(403);
   }
