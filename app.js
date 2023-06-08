@@ -1,9 +1,11 @@
 var createError = require('http-errors');
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
+
 // mysql use
 var mysql = require('mysql');
 
@@ -16,7 +18,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
 // use database
 app.use(function(req, res, next){
@@ -32,6 +34,24 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+
+
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: 'super secret string',
+  secure: false
+}));
+
+app.use(function(req,res,next){
+  console.log("The current user is:"+req.session.username);
+  next();
+});
+
+
+
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

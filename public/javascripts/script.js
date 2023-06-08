@@ -154,10 +154,11 @@ function signup() {
   }
 
 
+// Updated AJAX function
 function login() {
     let logindata = {
-        username: document.getElementById('login-user').value,
-        password: document.getElementById('login-pass').value
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value
     };
 
     let req = new XMLHttpRequest();
@@ -176,3 +177,13 @@ function login() {
     req.setRequestHeader('Content-Type', 'application/json');
     req.send(JSON.stringify(logindata));
 }
+
+// Bind login function to form submission
+document.querySelector('.login_form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from being submitted normally
+    login(); // Call the login function to perform the AJAX request
+});
+
+
+
+

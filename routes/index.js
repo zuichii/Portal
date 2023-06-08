@@ -7,29 +7,29 @@ router.get('/', function(req, res, next) {
 });
 
 // signin post request
-router.post('/signin', function(req, res) {
-  req.pool.getConnection(function(err, connection) {
-    if(err){
-      res.sendStatus(500);
-      return;
-    }
-    var username = req.body.username;
-    var password = req.body.password;
-    var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
-    connection.query(query, [username, password], function(qerr, results) {
-      connection.release();
-      if(qerr){
-        res.sendStatus(500);
-        return;
-      }
-      if(results.length === 1){
-        res.sendStatus(200);
-      } else {
-        res.sendStatus(401);
-      }
-    });
-  });
-});
+// router.post('/signin', function(req, res) {
+//   req.pool.getConnection(function(err, connection) {
+//     if(err){
+//       res.sendStatus(500);
+//       return;
+//     }
+//     var username = req.body.username;
+//     var password = req.body.password;
+//     var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
+//     connection.query(query, [username, password], function(qerr, results) {
+//       connection.release();
+//       if(qerr){
+//         res.sendStatus(500);
+//         return;
+//       }
+//       if(results.length === 1){
+//         res.sendStatus(200);
+//       } else {
+//         res.sendStatus(401);
+//       }
+//     });
+//   });
+// });
 
 
 router.get('/club_profile', function(req, res, next) {
@@ -203,32 +203,40 @@ router.post('/createacc', function(req, res, next) {
 
 
 router.post('/login', function(req, res) {
-  req.pool.getConnection(function(err, connection) {
-      if (err) {
-          res.sendStatus(500);
-          return;
-      }
-
-      var username = req.body.username;
-      var password = req.body.password;
-      var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
-
-      connection.query(query, [username, password], function(qerr, results) {
-          connection.release();
-
-          if (qerr) {
+  if ('username' in req.body && 'password' in req.body) {
+      req.pool.getConnection(function(err, connection) {
+          if (err) {
               res.sendStatus(500);
               return;
           }
 
-          if (results.length === 1) {
-              res.sendStatus(200);
-          } else {
-              res.sendStatus(401);
-          }
+          var { username, password } = req.body;
+          var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
+
+          connection.query(query, [username, password], function(qerr, results) {
+              connection.release();
+
+              if (qerr) {
+                  res.sendStatus(500);
+                  return;
+              }
+
+              if (results.length === 1) {
+                  var user = results[0];
+                  req.session.user = user;
+                  console.log(user.user_name);
+                  res.json(user);
+              } else {
+                  res.sendStatus(401);
+              }
+          });
       });
-  });
+  } else {
+      res.sendStatus(401);
+  }
 });
+
+
 
 
 
