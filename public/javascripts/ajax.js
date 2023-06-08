@@ -174,6 +174,7 @@ function signup() {
   const req = new XMLHttpRequest();
   req.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
+      window.location.href = 'login.html';
       alert('Signed up successfully');
     } else if (this.status === 401) {
       alert('Signed up failed');
@@ -197,7 +198,7 @@ function login() {
 
   req.onreadystatechange = function() {
       if (this.readyState === 4 && this.status === 200) {
-        window.location.href = 'dashboard.html';
+        window.location.href = 'home.html';
         alert('Logged in successfully');
       } else if (this.status == 401) {
         alert('Login FAILED');

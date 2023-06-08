@@ -51,7 +51,7 @@
           <br>
           <h1>Create Account</h1>
 
-          <form @submit.prevent="createAccount">
+          <form @submit.prevent="createAccount" onsubmit="event.preventDefault(); signup();">
             <label for="email">Email:</label>
             <input type="email" id="email" v-model="email" required>
             <br>
@@ -69,7 +69,7 @@
             <br>
             <br>
 
-            <button onclick="signup()" type="submit" :disabled="password !== passwordConfirm || !passwordConfirm">Create Account</button>
+            <button type="submit" :disabled="password !== passwordConfirm || !passwordConfirm">Create Account</button>
           </form>
           <p v-if="message">{{ message }}</p>
         </div>
