@@ -216,3 +216,22 @@ function login() {
   req.setRequestHeader('Content-Type', 'application/json');
   req.send(JSON.stringify(logindata));
 }
+
+
+
+function logout() {
+
+  let req = new XMLHttpRequest();
+
+  req.onreadystatechange = function(){
+      if(req.readyState == 4 && req.status == 200){
+          alert('Logged Out');
+      } else if(req.readyState == 4 && req.status == 403){
+          alert('Not logged in');
+      }
+  };
+
+  req.open('POST','/logout');
+  req.send();
+
+}
