@@ -11,6 +11,7 @@
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <script src="javascripts/script.js" defer></script>
 <script src="javascripts/ajax.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
 
 
@@ -44,44 +45,36 @@
         </ul>
     </header>
 
-    <div class="container">
+    <div class="createAccountContainer">
         <div class="form-wrapper">
-            <h1>Create Account</h1>
+          <br>
+          <br>
+          <h1>Create Account</h1>
 
+          <form @submit.prevent="createAccount">
+            <label for="email">Email:</label>
+            <input type="email" id="email" v-model="email" required>
+            <br>
 
+            <label for="username">Username:</label>
+            <input type="text" id="username" v-model="username" required>
+            <br>
 
-            <form @submit.prevent="createAccount">
-                <label for="name">Name:</label>
-                <input type="text" id="name" v-model="name" required>
-                <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" v-model="password" required>
+            <br>
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" v-model="email" required>
-                <br>
+            <label v-show="password !== ''" for="passwordConfirm">Confirm Password:</label>
+            <input v-show="password !== ''" type="password" id="passwordConfirm" v-model="passwordConfirm" required>
+            <br>
+            <br>
 
-                <label for="student-id">Student ID:</label>
-                <input type="text" id="student-id" v-model="studentID" required>
-                <br>
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" v-model="password" required>
-                <br>
-
-                <label for="passwordConfirm">Confirm Password:</label>
-                <input for="password" id="passwordConfirm" v-model="passwordConfirm" required>
-                <br>
-
-                <label for="degree">Degree of Study:</label>
-                <input for="degree" id="degree" v-model="degree" required>
-                <br>
-                <br>
-
-
-                <button type="submit">Create Account</button>
-            </form>
-            <p v-if="message">{{ message }}</p>
+            <button onclick="signup()" type="submit" :disabled="password !== passwordConfirm || !passwordConfirm">Create Account</button>
+          </form>
+          <p v-if="message">{{ message }}</p>
         </div>
-    </div>
+      </div>
+
 
 
 

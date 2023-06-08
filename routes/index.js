@@ -151,5 +151,85 @@ router.get('/get_club_description', function(req, res, next) {
 });
 
 
+router.post('/createacc', function(req, res, next) {
+  const { username, email, password } = req.body;
+
+  // Check if the username or email already exists in the database
+  var query = 'SELECT * FROM user WHERE user_name = ? OR email = ?';
+  req.pool.query(query, [username, email], function(error, results) {
+    if (error) {
+      console.error(error);
+      return res.sendStatus(500);
+    }
+
+    if (results.length > 0) {
+      // Check if the username is already taken
+      const isUsernameTaken = results.some(function(user) {
+        return user.user_name === username;
+      });
+
+      if (isUsernameTaken) {
+        return res.sendStatus(401);
+      }
+
+      // Check if the email is already taken
+      const isEmailTaken = results.some(function(user) {
+        return user.email === email;
+      });
+
+      if (isEmailTaken) {
+        return res.sendStatus(402);
+      }
+    }
+
+    // Insert the new user into the database
+    const newUser = {
+      user_name: username,
+      email: email,
+      password: password
+    };
+
+    var insertquery = 'INSERT INTO user SET ?';
+    req.pool.query(insertquery, newUser, function(ierror) {
+      if (error) {
+        console.error(error);
+        return res.sendStatus(500);
+      }
+
+      return res.sendStatus(200);
+    });
+  });
+});
+
+
+router.post('/login', function(req, res) {
+  req.pool.getConnection(function(err, connection) {
+      if (err) {
+          res.sendStatus(500);
+          return;
+      }
+
+      var username = req.body.username;
+      var password = req.body.password;
+      var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
+
+      connection.query(query, [username, password], function(qerr, results) {
+          connection.release();
+
+          if (qerr) {
+              res.sendStatus(500);
+              return;
+          }
+
+          if (results.length === 1) {
+              res.sendStatus(200);
+          } else {
+              res.sendStatus(401);
+          }
+      });
+  });
+});
+
+
 
 module.exports = router;
