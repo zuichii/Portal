@@ -1,6 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
+
+
+const CLIENT_ID = 'MY-CLIENT-ID.apps.googleusercontent.com';
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(CLIENT_ID);
+
+
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -202,7 +211,7 @@ router.post('/createacc', function(req, res, next) {
 });
 
 
-router.post('/login', function(req, res) {
+router.post('/login', async function(req, res) {
   if ('username' in req.body && 'password' in req.body) {
     req.pool.getConnection(function(err, connection) {
       if (err) {
@@ -244,6 +253,45 @@ router.post('/logout', function (req, res, next) {
     res.sendStatus(403);
   }
 });
+
+
+router.post('/google_login', async function (req, res, next) {
+  const ticket = await client.verifyIdToken({
+    idToken: req.body.credential,
+    audience: CLIENT_ID
+  });
+
+  const payload = ticket.getPayload();
+  const { email } = payload;
+
+  // Search for user by email in the database
+  req.pool.getConnection(function (err, connection) {
+    if (err) {
+      res.sendStatus(500);
+      return;
+    }
+
+    var query = "SELECT * FROM user WHERE email = ?";
+    connection.query(query, [email], function (qerr, results) {
+      connection.release();
+
+      if (qerr) {
+        res.sendStatus(500);
+        return;
+      }
+
+      if (results.length === 1) {
+        var user = results[0];
+        req.session.user = user;
+        console.log("User logged in:", user.user_name);
+        res.json(user);
+      } else {
+        res.sendStatus(401);
+      }
+    });
+  });
+});
+
 
 
 
