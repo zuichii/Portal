@@ -210,7 +210,6 @@ function login() {
 }
 
 
-
 function logout() {
   let req = new XMLHttpRequest();
 

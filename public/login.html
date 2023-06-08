@@ -45,7 +45,7 @@
         </ul>
     </header>
 
-    <form class="login_form">
+    <form class="login_form" id="login_form" onsubmit="event.preventDefault(); login();">
         <div class="container1" id="login">
             <label><b>Username</b></label>
             <input id="username" class="signin" type="text" placeholder="Enter username" name="username">
@@ -54,7 +54,7 @@
             <span class="small" id="lost_psw"><a href="#">Forgot password?</a></span>
             <input id="password" class="signin" type="password" placeholder="Enter password" name="password">
 
-            <button type="submit" class="pure-button" onclick="login()">Login</button>
+            <button type="submit" class="pure-button">Login</button>
             <label class="rmb">
                 <input type="checkbox" name="remember_me">
                 Remember me

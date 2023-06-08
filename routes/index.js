@@ -160,6 +160,9 @@ router.get('/get_club_description', function(req, res, next) {
 });
 
 
+const bcrypt = require('bcrypt');
+
+
 router.post('/createacc', function(req, res, next) {
   const { username, email, password } = req.body;
 
@@ -191,21 +194,29 @@ router.post('/createacc', function(req, res, next) {
       }
     }
 
-    // Insert the new user into the database
-    const newUser = {
-      user_name: username,
-      email: email,
-      password: password
-    };
-
-    var insertquery = 'INSERT INTO user SET ?';
-    req.pool.query(insertquery, newUser, function(ierror) {
-      if (ierror) {
-        console.error(ierror);
+    // Hash the password
+    bcrypt.hash(password, 10, function(err, hashedPassword) {
+      if (err) {
+        console.error(err);
         return res.sendStatus(500);
       }
 
-      return res.sendStatus(200);
+      // Insert the new user into the database with the hashed password
+      const newUser = {
+        user_name: username,
+        email: email,
+        password: hashedPassword
+      };
+
+      var insertquery = 'INSERT INTO user SET ?';
+      req.pool.query(insertquery, newUser, function(ierror) {
+        if (ierror) {
+          console.error(ierror);
+          return res.sendStatus(500);
+        }
+
+        return res.sendStatus(200);
+      });
     });
   });
 });
@@ -220,9 +231,9 @@ router.post('/login', async function(req, res) {
       }
 
       var { username, password } = req.body;
-      var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
+      var query = "SELECT * FROM user WHERE user_name = ?";
 
-      connection.query(query, [username, password], function(qerr, results) {
+      connection.query(query, [username], function(qerr, results) {
         connection.release();
 
         if (qerr) {
@@ -232,9 +243,20 @@ router.post('/login', async function(req, res) {
 
         if (results.length === 1) {
           var user = results[0];
-          req.session.user = user;
-          console.log("User logged in:", user.user_name);
-          res.json(user);
+          bcrypt.compare(password, user.password, function(bcryptErr, isMatch) {
+            if (bcryptErr) {
+              console.error(bcryptErr);
+              return res.sendStatus(500);
+            }
+
+            if (isMatch) {
+              req.session.user = user;
+              console.log("User logged in:", user.user_name);
+              res.status(200).json(user);
+            } else {
+              res.sendStatus(401);
+            }
+          });
         } else {
           res.sendStatus(401);
         }
