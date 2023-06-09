@@ -321,11 +321,11 @@ function getUserInfo() {
         const userInfo = JSON.parse(req.responseText);
         console.log(userInfo);
         const name = userInfo.user_name;
-        const email = userInfo.email;
+        const user_email = userInfo.email;
         const nameElement = document.getElementById("name");
         const emailElement = document.getElementById("email");
         nameElement.innerHTML = name;
-        emailElement.innerHTML = email;
+        emailElement.innerHTML = user_email;
       }
     }
   };
@@ -349,6 +349,8 @@ document.getElementById('updateForm').addEventListener('submit', function(event)
     name: name,
     email: email
   };
+
+
 
   // Make an AJAX request to update the user information
   const req = new XMLHttpRequest();
@@ -416,3 +418,4 @@ function createEvent() {
 
   xhr.send(JSON.stringify(eventData));
 }
+
