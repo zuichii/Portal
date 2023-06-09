@@ -275,41 +275,13 @@ function retrieveClubId(){
 
 
 
-// function retrieveUserId() {
-//   const session = JSON.parse(localStorage.getItem('session'));
-//   if (session && session.user && session.user.user_id) {
-//     return session.user.user_id;
-//   }
-//   return null;
-// }
-
-function retrieveUserId(){
-
-  let req = new XMLHttpRequest();
-
-  req.onreadystatechange = function(){
-      if(req.readyState == 4 && req.status == 200){
-          var userDetails = JSON.parse(this.responseText);
-      } else {
-          alert("error");
-      }
-  };
-
-  req.open('GET','/get_current_user_info');
-  req.send();
-<<<<<<< HEAD
-  console.log(userid);
-  return userid;
-=======
->>>>>>> e6f9be49e0205b6dc0df03f047ed74d88ca5f84c
-}
 
 
 function subscriptionToggler() {
   const button = document.getElementById('subscribe');
   const ifSubbed = button.textContent === 'Subscribe';
 
-  const userId = retrieveUserId().userDetails.user_id;
+  // const userId = retrieveUserId().userDetails.user_id;
   const clubId = retrieveClubId();
 
   const toggle = new XMLHttpRequest();
@@ -329,7 +301,7 @@ function subscriptionToggler() {
     }
   };
 
-  toggle.send(JSON.stringify({ userId, clubId }));
+  toggle.send(JSON.stringify({ clubId }));
 
   button.textContent = ifSubbed ? 'Unsubscribe' : 'Subscribe';
 }

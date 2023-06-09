@@ -374,7 +374,8 @@ router.get('/get_current_user_info', (req, res) => {
 
 
 router.post('/subscribe', function(req, res, next) {
-  const { userId, clubId } = req.body;
+  const userId = req.session.user.user_id;
+  const { clubId } = req.body;
 
   req.pool.getConnection(function(error, connection) {
     if (error) {
@@ -419,7 +420,8 @@ router.post('/subscribe', function(req, res, next) {
 
 
 router.post('/unsubscribe', function(req, res, next) {
-  const { userId, clubId } = req.body;
+  const userId = req.session.user.user_id;
+  const { clubId } = req.body;
 
   req.pool.getConnection((err, connection) => {
     if (err) {
@@ -480,6 +482,12 @@ router.post('/update_user', function(req,res,next) {
     });
   });
 });
+
+
+
+
+
+
 
 
 module.exports = router;
