@@ -461,7 +461,25 @@ router.post('/unsubscribe', function(req, res, next) {
   });
 });
 
+router.get('/update_user', function(req,res,next) {
+  const current_user = req.session.user.user_id;
+  const { name, email } = req.body;
 
+  req.pool.getConnection(function(err, connection) {
+    if (err) {
+      res.status(500).send('error getting database connection');
+    }
+
+    const query = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
+
+    connection.query(query, [name, email, current_user], function(error, results) {
+      if(error){
+        res.status(500).send('error changing data');
+      }
+      res.sendStatus(200);
+    });
+  });
+});
 
 
 module.exports = router;
