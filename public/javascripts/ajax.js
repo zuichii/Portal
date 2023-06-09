@@ -354,7 +354,7 @@ function updateUser(event) {
   req.setRequestHeader('Content-Type', 'application/json');
 
   req.onreadystatechange = function() {
-    if (req.readyState === XMLHttpRequest.DONE) {
+    if (req.readyState === 4) {
       if (req.status === 200) {
         // Request successful, handle the response
         const response = JSON.parse(req.responseText);
