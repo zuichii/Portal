@@ -335,7 +335,9 @@ function getUserInfo() {
 }
 
 
-function updateUser(event) {
+
+
+document.getElementById('updateForm').addEventListener('submit', function(event) {
   event.preventDefault(); // Prevent the form from submitting normally
 
   // Retrieve the updated values from the input fields
@@ -378,55 +380,42 @@ function updateUser(event) {
 
   // Send the request with the data
   req.send(JSON.stringify(data));
-}
+});
 
-// Function to update the HTML with the events data
-function updateEventsHTML(events) {
-  // Get the main element where the events will be displayed
-  const mainElement = document.querySelector('main.explore_events');
 
-  // Clear the existing content
-  mainElement.innerHTML = '';
 
-  // Loop through the events data and create HTML elements for each event
-  events.forEach(function(event) {
-    const boxContent = document.createElement('div');
-    boxContent.className = 'box_content';
 
-    const box = document.createElement('div');
-    box.className = 'box';
-    const clubLogo = document.createElement('img');
-    clubLogo.src = event.club_logo;
-    clubLogo.alt = 'club logo';
-    box.appendChild(clubLogo);
-    boxContent.appendChild(box);
+function createEvent() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var clubId = urlParams.get('id');
 
-    const eventName = document.createElement('h3');
-    eventName.textContent = event.event_name;
-    boxContent.appendChild(eventName);
+  const eventName = document.getElementById('event-name').value;
+  const dateTime = document.getElementById('event-dateTime').value;
+  const location = document.getElementById('event-location').value;
+  const desc = document.getElementById('event-description').value;
 
-    const eventDate = document.createElement('h6');
-    eventDate.textContent = event.event_date;
-    boxContent.appendChild(eventDate);
+  var eventData = {
+    eventName: eventName,
+    dateTime: dateTime,
+    location: location,
+    desc: desc,
+    clubId: clubId
+  };
 
-    mainElement.appendChild(boxContent);
-  });
-}
+  var xhr = new XMLHttpRequest();
 
-// Make an AJAX request to retrieve events data from the server
-function retrieveEvents() {
-  const req = new XMLHttpRequest();
-  req.open('GET', '/get_events', true);
+  xhr.open('POST', '/create-event');
 
-  req.onreadystatechange = function() {
-    if (req.readyState === 4 && req.status === 200) {
-      // Parse the response as JSON
-      const events = JSON.parse(req.responseText);
+  xhr.setRequestHeader('Content-type', 'application/json');
 
-      // Call the function to update the HTML with the events data
-      updateEventsHTML(events);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      alert('Event created.');
+    } else {
+      alert('Event could not be created.');
     }
   };
 
-  req.send();
+  xhr.send(JSON.stringify(eventData));
 }
+
