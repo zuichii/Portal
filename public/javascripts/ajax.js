@@ -298,7 +298,7 @@ function retrieveUserId(){
 
   req.open('GET','/get_current_user_info');
   req.send();
-
+  console.log(userid);
   return userid;
 }
 
