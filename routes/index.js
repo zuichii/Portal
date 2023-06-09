@@ -319,7 +319,7 @@ router.post('/google_login', async function (req, res, next) {
 router.post('/update_user', function(req, res, next) {
   var updated_email = req.body.email;
   var updated_username = req.body.username;
-  var updated_password = req.body.password;
+  // var updated_password = req.body.password;
 
   // Update the user's information in the database using database operations or queries
   req.pool.getConnection(function(err, connection) {
@@ -327,8 +327,8 @@ router.post('/update_user', function(req, res, next) {
       return next(err);
     }
 
-    var query = "UPDATE users SET email = ?, username = ?, password = ? WHERE id = ?";
-    var values = [updated_email, updated_username, updated_password, req.session.user.id];
+    var query = "UPDATE user SET email = ?, user_name = ? WHERE user_id = ?";
+    var values = [updated_email, updated_username, req.session.user.user_id];
 
     connection.query(query, values, function(qerr, results) {
       connection.release();
@@ -337,7 +337,7 @@ router.post('/update_user', function(req, res, next) {
         return next(qerr);
       }
 
-      res.json({ message: "User information updated successfully" });
+      res.sendStatus(200);
     });
   });
 });
@@ -463,25 +463,7 @@ router.post('/unsubscribe', function(req, res, next) {
   });
 });
 
-router.post('/update_user', function(req,res,next) {
-  const current_user = req.session.user.user_id;
-  const { name, email } = req.body;
 
-  req.pool.getConnection(function(err, connection) {
-    if (err) {
-      res.status(500).send('error getting database connection');
-    }
-
-    const query = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
-
-    connection.query(query, [name, email, current_user], function(error, results) {
-      if(error){
-        res.status(500).send('error changing data');
-      }
-      res.sendStatus(200);
-    });
-  });
-});
 
 
 

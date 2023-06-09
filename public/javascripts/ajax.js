@@ -335,7 +335,9 @@ function getUserInfo() {
 }
 
 
-function updateUser(event) {
+
+
+document.getElementById('updateForm').addEventListener('submit', function(event) {
   event.preventDefault(); // Prevent the form from submitting normally
 
   // Retrieve the updated values from the input fields
@@ -376,5 +378,41 @@ function updateUser(event) {
 
   // Send the request with the data
   req.send(JSON.stringify(data));
-}
+});
 
+
+
+
+function createEvent() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var clubId = urlParams.get('id');
+
+  const eventName = document.getElementById('event-name').value;
+  const dateTime = document.getElementById('event-dateTime').value;
+  const location = document.getElementById('event-location').value;
+  const desc = document.getElementById('event-description').value;
+
+  var eventData = {
+    eventName: eventName,
+    dateTime: dateTime,
+    location: location,
+    desc: desc,
+    clubId: clubId
+  };
+
+  var xhr = new XMLHttpRequest();
+
+  xhr.open('POST', '/create-event');
+
+  xhr.setRequestHeader('Content-type', 'application/json');
+
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      alert('Event created.');
+    } else {
+      alert('Event could not be created.');
+    }
+  };
+
+  xhr.send(JSON.stringify(eventData));
+}
