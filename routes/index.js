@@ -3,7 +3,7 @@ var router = express.Router();
 
 
 
-const CLIENT_ID = 'MY-CLIENT-ID.apps.googleusercontent.com';
+const CLIENT_ID = 'MY-CLIENT-ID.routers.googleusercontent.com';
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(CLIENT_ID);
 
@@ -11,7 +11,7 @@ const client = new OAuth2Client(CLIENT_ID);
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
@@ -42,10 +42,10 @@ router.get('/', function(req, res, next) {
 // });
 
 
-router.get('/club_profile', function(req, res, next) {
+router.get('/club_profile', function (req, res, next) {
   var clubId = req.query.id;
 
-  req.pool.getConnection(function(err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       console.error('Error getting database connection:', err);
       res.status(500).send('Internal Server Error');
@@ -54,7 +54,7 @@ router.get('/club_profile', function(req, res, next) {
 
     // get club data
     var clubQuery = "SELECT club_name, club_description FROM club WHERE club_id = ?";
-    connection.query(clubQuery, [clubId], function(qerr, clubRows) {
+    connection.query(clubQuery, [clubId], function (qerr, clubRows) {
       if (qerr) {
         console.error('Error executing club query:', qerr);
         connection.release();
@@ -67,7 +67,7 @@ router.get('/club_profile', function(req, res, next) {
 
         // get number of posts
         var postsQuery = "SELECT COUNT(*) AS num_posts FROM post WHERE club_id = ?";
-        connection.query(postsQuery, [clubId], function(perr, postsRows) {
+        connection.query(postsQuery, [clubId], function (perr, postsRows) {
           if (perr) {
             console.error('Error executing posts query:', perr);
             connection.release();
@@ -83,7 +83,7 @@ router.get('/club_profile', function(req, res, next) {
 
           // get number of members
           var membersQuery = "SELECT COUNT(*) AS num_members FROM club_membership WHERE club_id = ?";
-          connection.query(membersQuery, [clubId], function(merr, membersRows) {
+          connection.query(membersQuery, [clubId], function (merr, membersRows) {
             connection.release();
             if (merr) {
               console.error('Error executing members query:', merr);
@@ -109,12 +109,12 @@ router.get('/club_profile', function(req, res, next) {
 });
 
 
-router.get('/get_posts', function(req, res, next) {
+router.get('/get_posts', function (req, res, next) {
   var clubId = req.query.id;
 
   // Query the database to fetch posts for the given club_id
   var query = 'SELECT * FROM post WHERE club_id = ?';
-  req.pool.query(query, [clubId], function(err, results) {
+  req.pool.query(query, [clubId], function (err, results) {
     if (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to fetch posts.' });
@@ -125,12 +125,12 @@ router.get('/get_posts', function(req, res, next) {
 });
 
 
-router.get('/get_events', function(req, res, next) {
+router.get('/get_events', function (req, res, next) {
   var clubId = req.query.id;
 
   // Query the database to fetch posts for the given club_id
   var query = 'SELECT * FROM event WHERE club_id = ?';
-  req.pool.query(query, [clubId], function(err, results) {
+  req.pool.query(query, [clubId], function (err, results) {
     if (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to fetch events.' });
@@ -142,12 +142,12 @@ router.get('/get_events', function(req, res, next) {
 
 
 
-router.get('/get_club_description', function(req, res, next) {
+router.get('/get_club_description', function (req, res, next) {
   var clubId = req.query.id;
 
   // Query the database to fetch posts for the given club_id
   var query = 'SELECT * FROM club WHERE club_id = ?';
-  req.pool.query(query, [clubId], function(err, results) {
+  req.pool.query(query, [clubId], function (err, results) {
     if (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to fetch events.' });
@@ -164,12 +164,12 @@ router.get('/get_club_description', function(req, res, next) {
 const bcrypt = require('bcrypt');
 
 
-router.post('/createacc', function(req, res, next) {
+router.post('/createacc', function (req, res, next) {
   const { username, email, password } = req.body;
 
   // Check if the username or email already exists in the database
   var query = 'SELECT * FROM user WHERE user_name = ? OR email = ?';
-  req.pool.query(query, [username, email], function(error, results) {
+  req.pool.query(query, [username, email], function (error, results) {
     if (error) {
       console.error(error);
       return res.sendStatus(500);
@@ -177,7 +177,7 @@ router.post('/createacc', function(req, res, next) {
 
     if (results.length > 0) {
       // Check if the username is already taken
-      const isUsernameTaken = results.some(function(user) {
+      const isUsernameTaken = results.some(function (user) {
         return user.user_name === username;
       });
 
@@ -186,7 +186,7 @@ router.post('/createacc', function(req, res, next) {
       }
 
       // Check if the email is already taken
-      const isEmailTaken = results.some(function(user) {
+      const isEmailTaken = results.some(function (user) {
         return user.email === email;
       });
 
@@ -196,7 +196,7 @@ router.post('/createacc', function(req, res, next) {
     }
 
     // Hash the password
-    bcrypt.hash(password, 10, function(err, hashedPassword) {
+    bcrypt.hash(password, 10, function (err, hashedPassword) {
       if (err) {
         console.error(err);
         return res.sendStatus(500);
@@ -210,7 +210,7 @@ router.post('/createacc', function(req, res, next) {
       };
 
       var insertquery = 'INSERT INTO user SET ?';
-      req.pool.query(insertquery, newUser, function(ierror) {
+      req.pool.query(insertquery, newUser, function (ierror) {
         if (ierror) {
           console.error(ierror);
           return res.sendStatus(500);
@@ -223,9 +223,9 @@ router.post('/createacc', function(req, res, next) {
 });
 
 
-router.post('/login', async function(req, res) {
+router.post('/login', async function (req, res) {
   if ('username' in req.body && 'password' in req.body) {
-    req.pool.getConnection(function(err, connection) {
+    req.pool.getConnection(function (err, connection) {
       if (err) {
         res.sendStatus(500);
         return;
@@ -234,7 +234,7 @@ router.post('/login', async function(req, res) {
       var { username, password } = req.body;
       var query = "SELECT * FROM user WHERE user_name = ?";
 
-      connection.query(query, [username], function(qerr, results) {
+      connection.query(query, [username], function (qerr, results) {
         connection.release();
 
         if (qerr) {
@@ -244,7 +244,7 @@ router.post('/login', async function(req, res) {
 
         if (results.length === 1) {
           var user = results[0];
-          bcrypt.compare(password, user.password, function(bcryptErr, isMatch) {
+          bcrypt.compare(password, user.password, function (bcryptErr, isMatch) {
             if (bcryptErr) {
               console.error(bcryptErr);
               return res.sendStatus(500);
@@ -315,14 +315,15 @@ router.post('/google_login', async function (req, res, next) {
   });
 });
 
-//user updates profile
-router.post('/update_user', function(req, res, next) {
+// user updates profile
+
+router.post('/update_user', function (req, res, next) {
   var updated_email = req.body.email;
   var updated_username = req.body.username;
   var updated_password = req.body.password;
 
   // Update the user's information in the database using database operations or queries
-  req.pool.getConnection(function(err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -330,7 +331,7 @@ router.post('/update_user', function(req, res, next) {
     var query = "UPDATE users SET email = ?, username = ?, password = ? WHERE id = ?";
     var values = [updated_email, updated_username, updated_password, req.session.user.id];
 
-    connection.query(query, values, function(qerr, results) {
+    connection.query(query, values, function (qerr, results) {
       connection.release();
 
       if (qerr) {
@@ -347,7 +348,7 @@ router.get('/get_current_user_info', (req, res) => {
   const userId = req.session.user.user_id;
   const sql = `SELECT user_name, email, password FROM user WHERE user_id = ${userId}`;
 
-  req.pool.getConnection(function(err, connection) {
+  req.pool.getConnection(function (err, connection) {
     connection.query(sql, (ierr, result) => {
       if (ierr) {
         console.error('Error executing the SQL query:', ierr);
@@ -373,11 +374,11 @@ router.get('/get_current_user_info', (req, res) => {
 
 
 
-router.post('/subscribe', function(req, res, next) {
+router.post('/subscribe', function (req, res, next) {
   const userId = req.session.user.user_id;
   const { clubId } = req.body;
 
-  req.pool.getConnection(function(error, connection) {
+  req.pool.getConnection(function (error, connection) {
     if (error) {
       console.log('Error getting database connection:', error);
       res.status(500).send('Error getting database connection');
@@ -386,7 +387,7 @@ router.post('/subscribe', function(req, res, next) {
 
     const check = 'SELECT * FROM club_membership WHERE user_id = ? AND club_id = ?';
 
-    connection.query(check, [userId, clubId], function(merror, results) {
+    connection.query(check, [userId, clubId], function (merror, results) {
       if (merror) {
         console.log('Error checking membership:', merror);
         res.status(500).send('Error checking membership');
@@ -403,7 +404,7 @@ router.post('/subscribe', function(req, res, next) {
 
       const subscribe = 'INSERT INTO club_membership (membership_type, user_id, club_id) VALUES (?, ?, ?)';
 
-      connection.query(subscribe, ['member', userId, clubId], function(serror) {
+      connection.query(subscribe, ['member', userId, clubId], function (serror) {
         connection.release(); // Release the connection back to the pool
 
         if (serror) {
@@ -419,7 +420,7 @@ router.post('/subscribe', function(req, res, next) {
 });
 
 
-router.post('/unsubscribe', function(req, res, next) {
+router.post('/unsubscribe', function (req, res, next) {
   const userId = req.session.user.user_id;
   const { clubId } = req.body;
 
@@ -463,19 +464,19 @@ router.post('/unsubscribe', function(req, res, next) {
   });
 });
 
-router.post('/update_user', function(req,res,next) {
+router.post('/update_user', function (req, res, next) {
   const current_user = req.session.user.user_id;
   const { name, email } = req.body;
 
-  req.pool.getConnection(function(err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       res.status(500).send('error getting database connection');
     }
 
     const query = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
 
-    connection.query(query, [name, email, current_user], function(error, results) {
-      if(error){
+    connection.query(query, [name, email, current_user], function (error, results) {
+      if (error) {
         res.status(500).send('error changing data');
       }
       res.sendStatus(200);
@@ -483,7 +484,36 @@ router.post('/update_user', function(req,res,next) {
   });
 });
 
+router.get('/user/events', function (req, res) {
+  const userId = req.session.userId;
 
+  const query = `
+    SELECT e.event_name, e.event_date
+    FROM events e
+    INNER JOIN club_membership m ON e.club_id = m.club_id
+    WHERE m.user_id = ?;
+  `;
+
+  req.pool.getConnection(function (err, connection) {
+    if (err) {
+      console.log('Error getting database connection:', err);
+      res.status(500).send('Error getting database connection');
+      return;
+    }
+
+    connection.query(query, [userId], function (error, results) {
+      connection.release(); // Release the connection back to the pool
+
+      if (error) {
+        console.log('Error fetching events:', error);
+        res.status(500).send('Error fetching events');
+        return;
+      }
+
+      res.json(results);
+    });
+  });
+});
 
 
 
