@@ -66,7 +66,9 @@ a{
   color: saddlebrown;
 }
 
-
+#dashboard_button{
+  display: none;
+}
 
 
 

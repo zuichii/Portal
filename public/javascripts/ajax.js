@@ -187,27 +187,45 @@ function signup() {
 }
 
 
+
+function changeButtons() {
+  document.addEventListener('DOMContentLoaded', function() {
+    const loginButton = document.getElementById("login_button");
+    const dashboardButton = document.getElementById("dashboard_button");
+    loginButton.style.display = "none";
+    dashboardButton.style.display = "block";
+  });
+}
+
+
 // Updated AJAX function
 function login() {
   let logindata = {
-      username: document.getElementById('username').value,
-      password: document.getElementById('password').value
+    username: document.getElementById('username').value,
+    password: document.getElementById('password').value
   };
 
   let req = new XMLHttpRequest();
 
   req.onreadystatechange = function() {
-      if (this.readyState === 4 && this.status === 200) {
+    if (this.readyState === 4) {
+      if (this.status === 200) {
         window.location.href = 'home.html';
         alert('Logged in successfully');
-      } else if (this.status == 401) {
+        console.log("now executing button change");
+        window.onload = function(){
+          changeButtons();
+        };
+      } else if (this.status === 401) {
         alert('Login FAILED');
       }
+    }
   };
 
   req.open('POST', '/login');
   req.setRequestHeader('Content-Type', 'application/json');
   req.send(JSON.stringify(logindata));
+
 }
 
 
@@ -255,3 +273,71 @@ function do_google_login(response){
   req.send(JSON.stringify(response));
 
 }
+
+
+
+function retrieveClubId(){
+
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id');
+}
+
+function retrieveUserId(){
+
+  const userId = sessionStorage.getItem('user_id');
+  return userId;
+}
+
+
+document.getElementById('subscribe').addEventListener('click', () => {
+
+  const userId = retrieveUserId();
+  const clubId = retrieveClubId();
+
+  const sub = new XMLHttpRequest();
+
+  sub.open('POST', '/subscribe');
+  sub.setRequestHeader('Content-Type', 'application/json');
+
+  sub.onload = function(){
+
+      if(sub.status === 200){
+          alert('Subscribed to' + clubId);
+      }
+
+      else{
+          alert('Error subscribing');
+      }
+  };
+
+  sub.send(JSON.stringify({ userId, clubId}));
+});
+
+
+
+
+
+document.getElementById('unsubscribe').addEventListener('click', () => {
+
+  const userId = retrieveUserId();
+  const clubId = retrieveClubId();
+
+  const unsub = new XMLHttpRequest();
+
+  unsub.open('POST', '/unsubscribe');
+  unsub.setRequestHeader('Content-Type', 'application/json');
+
+  unsub.onload = function(){
+
+      if(unsub.status === 200){
+          alert('Unsubscribed from' + clubId);
+      }
+
+      else{
+          alert('Error unsubscribing');
+      }
+  };
+
+  unsub.send(JSON.stringify({ userId, clubId}));
+
+});

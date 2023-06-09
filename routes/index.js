@@ -316,7 +316,80 @@ router.post('/google_login', async function (req, res, next) {
 
 
 
+router.post('/subscribe', function(req, res, next){
+  const { userId, clubId } = req.body;
+
+  const check = 'SELECT * FROM club_membership WHERE user_id = ? AND club_id = ?';
+
+  connection.query(check, [userId, clubId], (error, results) => {
+
+      if(error){
+          console.log('error');
+          res.send(500);
+          return;
+      }
+
+      if(results.length > 0) {
+          res.send(400);
+          console.log('User already subscribed to the club');
+      }
+
+      else{
+
+          const subscribe = 'INSERT INTO club_membership (membership_type, user_id, club_id) VALUES (?, ?, ?)';
+
+          connection.query(subscribe, ['member', userId, clubId], (serror) => {
+
+              if(serror){
+                  console.log('error');
+                  res.send(500);
+                  return;
+              }
+
+              res.send(200);
+          });
+      }
+  });
+});
 
 
+router.post('/unsubscribe', function(req, res, next){
+
+  const { userId, clubId } = req.body;
+
+  const check = 'SELECT * FROM club_membership WHERE user_id = ? AND club_id = ?';
+
+  connection.query(check, [userId, clubId], (error, results) => {
+
+      if(error){
+          console.log('error');
+          res.send(500);
+          return;
+      }
+
+      if(results.length === 0) {
+          res.send(400);
+          console.log('User is not subscribed to the club');
+      }
+
+      else{
+
+          const unsubsribe = 'DELETE FROM club_membership WHERE user_id = ? AND club_id = ?';
+
+          connection.query(unsubsribe, [userId, clubId], (serror) => {
+
+              if(serror){
+                  console.log('error unsubscribing user from club');
+                  res.send(500);
+                  return;
+              }
+
+              res.send(200);
+              console.log('User unsubscribed from club');
+          });
+      }
+
+  });
+});
 
 module.exports = router;
