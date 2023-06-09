@@ -187,17 +187,6 @@ function signup() {
 }
 
 
-
-function changeButtons() {
-  document.addEventListener('DOMContentLoaded', function() {
-    const loginButton = document.getElementById("login_button");
-    const dashboardButton = document.getElementById("dashboard_button");
-    loginButton.style.display = "none";
-    dashboardButton.style.display = "block";
-  });
-}
-
-
 // Updated AJAX function
 function login() {
   let logindata = {
@@ -212,10 +201,6 @@ function login() {
       if (this.status === 200) {
         window.location.href = 'home.html';
         alert('Logged in successfully');
-        console.log("now executing button change");
-        window.onload = function(){
-          changeButtons();
-        };
       } else if (this.status === 401) {
         alert('Login FAILED');
       }
