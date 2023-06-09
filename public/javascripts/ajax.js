@@ -187,27 +187,45 @@ function signup() {
 }
 
 
+
+function changeButtons() {
+  document.addEventListener('DOMContentLoaded', function() {
+    const loginButton = document.getElementById("login_button");
+    const dashboardButton = document.getElementById("dashboard_button");
+    loginButton.style.display = "none";
+    dashboardButton.style.display = "block";
+  });
+}
+
+
 // Updated AJAX function
 function login() {
   let logindata = {
-      username: document.getElementById('username').value,
-      password: document.getElementById('password').value
+    username: document.getElementById('username').value,
+    password: document.getElementById('password').value
   };
 
   let req = new XMLHttpRequest();
 
   req.onreadystatechange = function() {
-      if (this.readyState === 4 && this.status === 200) {
+    if (this.readyState === 4) {
+      if (this.status === 200) {
         window.location.href = 'home.html';
         alert('Logged in successfully');
-      } else if (this.status == 401) {
+        console.log("now executing button change");
+        window.onload = function(){
+          changeButtons();
+        };
+      } else if (this.status === 401) {
         alert('Login FAILED');
       }
+    }
   };
 
   req.open('POST', '/login');
   req.setRequestHeader('Content-Type', 'application/json');
   req.send(JSON.stringify(logindata));
+
 }
 
 
@@ -256,50 +274,70 @@ function do_google_login(response){
 
 }
 
-function getUserInfo() {
-  var req = new XMLHttpRequest();
 
-  req.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-      var userData = JSON.parse(this.responseText);
-      document.getElementById('name').textContent = userData.username;
-      document.getElementById('email').textContent = userData.email;
-      document.getElementById('password').textContent = userData.password;
-    }
-  };
 
-  req.open('GET', '/user_info', true);
-  req.send();
+function retrieveClubId(){
+
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id');
 }
 
-window.addEventListener('DOMContentLoaded', getUserInfo);
+function retrieveUserId(){
 
-function updateUser() {
-  var updatedEmail = document.getElementById("email-input").value;
-  var updatedUsername = document.getElementById("username-input").value;
-  var updatedPassword = document.getElementById("password-input").value;
+  const userId = sessionStorage.getItem('user_id');
+  return userId;
+}
 
-  var updatedData = {
-    email: updatedEmail,
-    username: updatedUsername,
-    password: updatedPassword
-  };
 
-  var req = new XMLHttpRequest();
+document.getElementById('subscribe').addEventListener('click', () => {
 
-  req.onreadystatechange = function() {
-    if (this.readyState === 4) {
-      if (this.status === 200) {
-        // Handle success, redirect the user to a success page or perform any other action
-      } else {
-        // Handle error appropriately
+  const userId = retrieveUserId();
+  const clubId = retrieveClubId();
+
+  const sub = new XMLHttpRequest();
+
+  sub.open('POST', '/subscribe');
+  sub.setRequestHeader('Content-Type', 'application/json');
+
+  sub.onload = function(){
+
+      if(sub.status === 200){
+          alert('Subscribed to' + clubId);
       }
-    }
+
+      else{
+          alert('Error subscribing');
+      }
   };
 
-  req.open("POST", "/update_user", true);
-  req.setRequestHeader("Content-Type", "application/json");
-  req.send(JSON.stringify(updatedData));
-}
+  sub.send(JSON.stringify({ userId, clubId}));
+});
 
 
+
+
+
+document.getElementById('unsubscribe').addEventListener('click', () => {
+
+  const userId = retrieveUserId();
+  const clubId = retrieveClubId();
+
+  const unsub = new XMLHttpRequest();
+
+  unsub.open('POST', '/unsubscribe');
+  unsub.setRequestHeader('Content-Type', 'application/json');
+
+  unsub.onload = function(){
+
+      if(unsub.status === 200){
+          alert('Unsubscribed from' + clubId);
+      }
+
+      else{
+          alert('Error unsubscribing');
+      }
+  };
+
+  unsub.send(JSON.stringify({ userId, clubId}));
+
+});
