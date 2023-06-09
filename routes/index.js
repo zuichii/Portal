@@ -461,7 +461,7 @@ router.post('/unsubscribe', function(req, res, next) {
   });
 });
 
-router.get('/update_user', function(req,res,next) {
+router.post('/update_user', function(req,res,next) {
   const current_user = req.session.user.user_id;
   const { name, email } = req.body;
 

@@ -58,7 +58,7 @@
       <input id="password-input" type="password" class="edit-input" />
 
       <!-- Update user information form -->
-      <form id="updateForm">
+      <form id="updateForm" action="/update_user" method="post" onsubmit="event.preventDefault(); updateUser()">
         <button type="submit">Update</button>
       </form>
     </div>
