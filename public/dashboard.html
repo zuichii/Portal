@@ -12,44 +12,6 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <script src="javascripts/script.js" defer></script>
   <script src="javascripts/ajax.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      document.getElementById("updateForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        // Extract the updated information from the form inputs
-        var updatedEmail = document.getElementById("email-input").value;
-        var updatedUsername = document.getElementById("username-input").value;
-        var updatedPassword = document.getElementById("password-input").value;
-
-        // Create an object to hold the updated information
-        var updatedData = {
-          email: updatedEmail,
-          username: updatedUsername,
-          password: updatedPassword
-        };
-
-        // Send the updated information to the server
-        fetch("/update_user", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(updatedData)
-        })
-          .then(function (response) {
-            if (response.ok) {
-             // redirect the user to a success page or perform any other action
-            } else {
-              // Handle the error appropriately
-            }
-          })
-          .catch(function (error) {
-            console.log("Error:", error);
-          });
-      });
-    });
-  </script>
 </head>
 
 <body>
@@ -77,22 +39,21 @@
       <li class="pure-menu-item">
         <a class="pure-button pure-button-primary" href="login.html">Login</a>
       </li>
-
     </ul>
   </header>
 
   <main class="dashboard">
     <div class="dashboard-section">
       <h2>User Profile</h2>
-      <p>Name: <span id="name">John Doe</span></p>
+      <p>Name: <span id="name"></span></p>
       <button type="button" onclick="toggleEditField('name')">Edit Name</button>
       <input id="name-input" type="text" class="edit-input" />
 
-      <p>Email: <span id="email">johndoe@example.com</span></p>
+      <p>Email: <span id="email"></span></p>
       <button type="button" onclick="toggleEditField('email')">Edit Email</button>
       <input id="email-input" type="email" class="edit-input" />
 
-      <p>Password: ********</p>
+      <p>Password: <span id="password"></span></p>
       <button type="button" onclick="toggleEditField('password')">Edit Password</button>
       <input id="password-input" type="password" class="edit-input" />
 

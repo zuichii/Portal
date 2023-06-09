@@ -255,3 +255,51 @@ function do_google_login(response){
   req.send(JSON.stringify(response));
 
 }
+
+function getUserInfo() {
+  var req = new XMLHttpRequest();
+
+  req.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+      var userData = JSON.parse(this.responseText);
+      document.getElementById('name').textContent = userData.username;
+      document.getElementById('email').textContent = userData.email;
+      document.getElementById('password').textContent = userData.password;
+    }
+  };
+
+  req.open('GET', '/user_info', true);
+  req.send();
+}
+
+window.addEventListener('DOMContentLoaded', getUserInfo);
+
+function updateUser() {
+  var updatedEmail = document.getElementById("email-input").value;
+  var updatedUsername = document.getElementById("username-input").value;
+  var updatedPassword = document.getElementById("password-input").value;
+
+  var updatedData = {
+    email: updatedEmail,
+    username: updatedUsername,
+    password: updatedPassword
+  };
+
+  var req = new XMLHttpRequest();
+
+  req.onreadystatechange = function() {
+    if (this.readyState === 4) {
+      if (this.status === 200) {
+        // Handle success, redirect the user to a success page or perform any other action
+      } else {
+        // Handle error appropriately
+      }
+    }
+  };
+
+  req.open("POST", "/update_user", true);
+  req.setRequestHeader("Content-Type", "application/json");
+  req.send(JSON.stringify(updatedData));
+}
+
+
