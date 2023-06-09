@@ -1,114 +1,124 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>UNITREE Dashboard</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
-        integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
-    <link rel="stylesheet" href="stylesheets/style.css" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <script src="javascripts/script.js" defer></script>
-    <script src="javascripts/ajax.js"></script>
-    <script>
+  <title>UNITREE Dashboard</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="stylesheets/style.css" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <script src="javascripts/script.js" defer></script>
+  <script src="javascripts/ajax.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("updateForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission
 
-    </script>
+        // Extract the updated information from the form inputs
+        var updatedEmail = document.getElementById("email-input").value;
+        var updatedUsername = document.getElementById("username-input").value;
+        var updatedPassword = document.getElementById("password-input").value;
+
+        // Create an object to hold the updated information
+        var updatedData = {
+          email: updatedEmail,
+          username: updatedUsername,
+          password: updatedPassword
+        };
+
+        // Send the updated information to the server
+        fetch("/update_user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(updatedData)
+        })
+          .then(function (response) {
+            if (response.ok) {
+             // redirect the user to a success page or perform any other action
+            } else {
+              // Handle the error appropriately
+            }
+          })
+          .catch(function (error) {
+            console.log("Error:", error);
+          });
+      });
+    });
+  </script>
 </head>
+
 <body>
-    <header class="pure-menu pure-menu-horizontal topnav">
-        <div class="pure-menu pure-menu-horizontal topnav-left">
-            <a href="home.html" class="pure-menu-heading logo"><img src="images/tree.jpg" alt="Home logo"></a>
-        </div>
+  <header class="pure-menu pure-menu-horizontal topnav">
+    <div class="pure-menu pure-menu-horizontal topnav-left">
+      <a href="home.html" class="pure-menu-heading logo"><img src="images/tree.jpg" alt="Home logo"></a>
+    </div>
 
-        <ul class="pure-menu-list topnav-right">
-            <li class="pure-menu-item">
-                <a href="explore_clubs.html">Clubs</a>
-            </li>
-            <li class="pure-menu-item">
-                <a href="explore_events.html">Events</a>
-            </li>
-            <li class="pure-menu-item">
-                <a href="about.html">About</a>
-            </li>
+    <ul class="pure-menu-list topnav-right">
+      <li class="pure-menu-item">
+        <a href="explore_clubs.html">Clubs</a>
+      </li>
+      <li class="pure-menu-item">
+        <a href="explore_events.html">Events</a>
+      </li>
+      <li class="pure-menu-item">
+        <a href="about.html">About</a>
+      </li>
 
-            <li class="pure-menu-item">
-                <form class="pure-form">
-                    <input type="text" class="pure-input-rounded" />
+      <li class="pure-menu-item">
+        <form class="pure-form">
+          <input type="text" class="pure-input-rounded" />
+        </form>
+      </li>
+      <li class="pure-menu-item">
+        <a class="pure-button pure-button-primary" href="login.html">Login</a>
+      </li>
 
-                </form>
-            </li>
-            <li class="pure-menu-item">
-                <a class="pure-button pure-button-primary" href="login.html">Login</a>
-            </li>
+    </ul>
+  </header>
 
-        </ul>
-    </header>
+  <main class="dashboard">
+    <div class="dashboard-section">
+      <h2>User Profile</h2>
+      <p>Name: <span id="name">John Doe</span></p>
+      <button type="button" onclick="toggleEditField('name')">Edit Name</button>
+      <input id="name-input" type="text" class="edit-input" />
 
-    <main class="dashboard">
-        <div class="dashboard-section">
-            <h2>User Profile</h2>
-            <p>Name: <span id="name">John Doe</span></p>
-            <button type="button" onclick="toggleEditField('name')">Edit Name</button>
-            <input id="name-input" type="text" class="edit-input" />
+      <p>Email: <span id="email">johndoe@example.com</span></p>
+      <button type="button" onclick="toggleEditField('email')">Edit Email</button>
+      <input id="email-input" type="email" class="edit-input" />
 
-            <p>Email: <span id="email">johndoe@example.com</span></p>
-            <button type="button" onclick="toggleEditField('email')">Edit Email</button>
-            <input id="email-input" type="email" class="edit-input" />
+      <p>Password: ********</p>
+      <button type="button" onclick="toggleEditField('password')">Edit Password</button>
+      <input id="password-input" type="password" class="edit-input" />
 
-            <p>Password: ********</p>
-            <button type="button" onclick="toggleEditField('password')">Edit Password</button>
-            <input id="password-input" type="password" class="edit-input" />
-        </div>
+      <!-- Update user information form -->
+      <form id="updateForm">
+        <button type="submit">Update</button>
+      </form>
+    </div>
 
-        <div class="dashboard-section">
-            <h2>Clubs</h2>
-            <div id="club-list">
-                <div class="club-box" id="club1" onclick="removeClub('club1')">Club 1</div>
-                <div class="club-box" id="club2" onclick="removeClub('club2')">Club 2</div>
-                <div class="club-box" id="club3" onclick="removeClub('club3')">Club 3</div>
-                <div class="club-box" id="club4" onclick="removeClub('club4')">Club 4</div>
-                <div class="club-box" id="club5" onclick="removeClub('club5')">Club 5</div>
-                <div class="club-box" id="club6" onclick="removeClub('club6')">Club 6</div>
-                <div class="club-box" id="club7" onclick="removeClub('club7')">Club 7</div>
-                <div class="club-box" id="club8" onclick="removeClub('club8')">Club 8</div>
-            </div>
-        </div>
-
-        <div class="dashboard-section">
-            <h2>Upcoming Events</h2>
-            <div class="event-list">
-                <div class="event">
-                    <div class="event-header">
-                        <h3 class="event-title">Event 1</h3>
-                        <button type="button" class="collapse-button">▼</button>
-                    </div>
-                    <div class="event-details">
-                        <!-- Event details go here -->
-                        <p>Event 1 details...</p>
-                        <button class="rsvp-button" type="button">RSVP</button>
-                    </div>
-                </div>
-                <div class="event">
-                    <div class="event-header">
-                        <h3 class="event-title">Event 2</h3>
-                        <button type="button" class="collapse-button">▼</button>
-                    </div>
-                    <div class="event-details">
-                        <!-- Event details go here -->
-                        <p>Event 2 details...</p>
-                        <button class="rsvp-button" type="button">RSVP</button>
-                    </div>
-                </div>
-                <!-- Add more events as needed -->
-            </div>
-        </div>
-        <button type="button" class="pure-button" onclick="logout()">Log out</button>
-    </main>
-
-    <footer>
-        <!-- Footer content goes here -->
-    </footer>
+    <div class="dashboard-section">
+      <h2>Clubs</h2>
+      <div id="club-list">
+        <div class="club-box" id="club1" onclick="removeClub('club1')">Club 1</div>
+        <div class="club-box" id="club2" onclick="removeClub('club2')">Club 2</div>
+        <div class="club-box" id="club3" onclick="removeClub('club3')">Club 3</div>
+        <div class="club-box" id="club4" onclick="removeClub('club4')">Club 4</div>
+        <div class="club-box" id="club5" onclick="removeClub('club5')">Club 5</div>
+        <div class="club-box" id="club6" onclick="removeClub('club6')">Club 6</div>
+        <div class="club-box" id="club7" onclick="removeClub('club7')">Club 7</div>
+        <div class="club-box" id="club8" onclick="removeClub('club8')">Club 8</div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <!-- Footer content goes here -->
+  </footer>
 </body>
-</html>
 
+</html>

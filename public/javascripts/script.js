@@ -50,24 +50,6 @@ function removeClub(clubId) {
     club.parentNode.removeChild(club);
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    var collapseButtons = document.querySelectorAll(".collapse-button");
-
-    collapseButtons.forEach(function(button) {
-        button.addEventListener("click", function() {
-
-            var eventDetails = button.parentElement.nextElementSibling;
-            eventDetails.classList.toggle("show");
-
-            button.textContent = eventDetails.classList.contains("show") ? "▲" : "▼";
-        });
-    });
-});
-
-function toggleEventDetails(eventId) {
-    var eventDetails = document.getElementById(eventId);
-    eventDetails.style.display = (eventDetails.style.display === "none") ? "block" : "none";
-}
 
 
 

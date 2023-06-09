@@ -53,6 +53,33 @@ app.use(function(req, res, next) {
   next();
 });
 
+//user updates profile
+app.post('/update_user', function(req, res, next) {
+  var updated_email = req.body.email;
+  var updated_username = req.body.username;
+  var updated_password = req.body.password;
+
+  // Update the user's information in the database using database operations or queries
+  req.pool.getConnection(function(err, connection) {
+    if (err) {
+      return next(err);
+    }
+
+    var query = "UPDATE users SET email = ?, username = ?, password = ? WHERE id = ?";
+    var values = [updated_email, updated_username, updated_password, req.session.user.id];
+
+    connection.query(query, values, function(err, results) {
+      connection.release();
+
+      if (err) {
+        return next(err);
+      }
+
+      res.json({ message: "User information updated successfully" });
+    });
+  });
+});
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));
