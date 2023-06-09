@@ -360,9 +360,10 @@ router.get('/get_current_user_info', (req, res) => {
       }
 
       const userInfo = {
+        user_id: result[0].user_id,
         user_name: result[0].user_name,
         email: result[0].email,
-        password: result[0].password,
+        password: result[0].password
       };
 
       res.json(userInfo);

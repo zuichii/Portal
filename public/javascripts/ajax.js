@@ -284,9 +284,22 @@ function retrieveClubId(){
 // }
 
 function retrieveUserId(){
+  var userid = '';
 
-  const userId = sessionStorage.getItem('user_id');
-  return userId;
+  let req = new XMLHttpRequest();
+
+  req.onreadystatechange = function(){
+      if(req.readyState == 4 && req.status == 200){
+          userid = this.userId;
+      } else {
+          alert("error");
+      }
+  };
+
+  req.open('GET','/get_current_user_info');
+  req.send();
+
+  return userid;
 }
 
 
@@ -391,33 +404,3 @@ function updateUser(event) {
   req.send(JSON.stringify(data));
 }
 
-// Function to retrieve and display the user information on page load
-function getUserInfo() {
-  // Make an AJAX request to fetch the user information
-  const req = new XMLHttpRequest();
-  req.open('GET', '/get_current_user_info', true);
-  req.setRequestHeader('Content-Type', 'application/json');
-
-  req.onreadystatechange = function() {
-    if (req.readyState === XMLHttpRequest.DONE) {
-      if (req.status === 200) {
-        // Request successful, handle the response
-        const userInfo = JSON.parse(req.responseText);
-
-        // Update the display fields with the user information
-        document.getElementById('name').textContent = userInfo.user_name;
-        document.getElementById('email').textContent = userInfo.email;
-
-        // Hide the input fields initially
-        document.getElementById('name-input').style.display = 'none';
-        document.getElementById('email-input').style.display = 'none';
-      } else {
-        // Request failed, handle the error
-        console.error('Error:', req.status);
-      }
-    }
-  };
-
-  // Send the request
-  req.send();
-}
