@@ -283,63 +283,62 @@ function retrieveClubId(){
 
 }
 
-function retrieveUserId(req) {
-  const userId = req.session.user.user_id;
+
+
+
+
+
+
+
+// function retrieveUserId() {
+//   const session = JSON.parse(localStorage.getItem('session'));
+//   if (session && session.user && session.user.user_id) {
+//     return session.user.user_id;
+//   }
+//   return null;
+// }
+
+function retrieveUserId(){
+
+  const userId = sessionStorage.getItem('user_id');
   return userId;
 }
 
 
-
-function subscribe(req) {
-  const userId = retrieveUserId(req);
-  const clubId = retrieveClubId();
-
-  const sub = new XMLHttpRequest();
-
-  sub.onreadystatechange = function() {
-    if (sub.readyState === 4 && sub.status ===200) {
-      alert('Subscribed to ' + clubId);
-    } else if(sub.readyState === 4 && sub.status === 500){
-      alert('Error subscribing');
-    }
-  };
-
-  sub.open('POST', '/subscribe');
-  sub.setRequestHeader('Content-Type', 'application/json');
-  sub.send(JSON.stringify({ userId, clubId }));
-}
-
-// document.getElementById('subscribe').addEventListener('click', subscribe);
-
-
-
-
-
-
-document.getElementById('unsubscribe').addEventListener('click', () => {
+function subscriptionToggler() {
+  const button = document.getElementById('subscribe');
+  const ifSubbed = button.textContent === 'Subscribe';
 
   const userId = retrieveUserId();
   const clubId = retrieveClubId();
 
-  const unsub = new XMLHttpRequest();
+  const toggle = new XMLHttpRequest();
 
-  unsub.open('POST', '/unsubscribe');
-  unsub.setRequestHeader('Content-Type', 'application/json');
+  toggle.open('POST', ifSubbed ? '/subscribe' : '/unsubscribe');
+  toggle.setRequestHeader('Content-Type', 'application/json');
 
-  unsub.onload = function(){
-
-      if(unsub.status === 200){
-          alert('Unsubscribed from' + clubId);
+  toggle.onload = function() {
+    if (toggle.status === 200) {
+      if (ifSubbed) {
+        alert('Subscribed to ' + clubId);
+      } else {
+        alert('Unsubscribed from ' + clubId);
       }
-
-      else{
-          alert('Error unsubscribing');
-      }
+    } else {
+      alert(ifSubbed ? 'Error subscribing.' : 'Error unsubscribing.');
+    }
   };
 
-  unsub.send(JSON.stringify({ userId, clubId}));
+  toggle.send(JSON.stringify({ userId, clubId }));
 
-});
+  button.textContent = ifSubbed ? 'Unsubscribe' : 'Subscribe';
+}
+
+
+
+
+
+
 
 function getUserInfo() {
   const req = new XMLHttpRequest();

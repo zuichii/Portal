@@ -417,44 +417,49 @@ router.post('/subscribe', function(req, res, next) {
 });
 
 
-router.post('/unsubscribe', function(req, res, next){
-
+router.post('/unsubscribe', function(req, res, next) {
   const { userId, clubId } = req.body;
 
-  const check = 'SELECT * FROM club_membership WHERE user_id = ? AND club_id = ?';
+  req.pool.getConnection((err, connection) => {
+    if (err) {
+      console.log('error getting database connection');
+      res.status(500).send('error getting database connection');
+      return;
+    }
 
-  connection.query(check, [userId, clubId], (error, results) => {
+    const check = 'SELECT * FROM club_membership WHERE user_id = ? AND club_id = ?';
 
-      if(error){
-          console.log('error');
-          res.send(500);
+    connection.query(check, [userId, clubId], (error, results) => {
+      if (error) {
+        console.log('error');
+        res.status(500).send('error');
+        connection.release();
+        return;
+      }
+
+      if (results.length === 0) {
+        res.status(400).send('User is not subscribed to the club');
+        connection.release();
+        return;
+      }
+
+      const unsubscribe = 'DELETE FROM club_membership WHERE user_id = ? AND club_id = ?';
+
+      connection.query(unsubscribe, [userId, clubId], (serror) => {
+        if (serror) {
+          console.log('error unsubscribing user from club');
+          res.status(500).send('error unsubscribing user from club');
+          connection.release();
           return;
-      }
+        }
 
-      if(results.length === 0) {
-          res.send(400);
-          console.log('User is not subscribed to the club');
-      }
-
-      else{
-
-          const unsubscribe = 'DELETE FROM club_membership WHERE user_id = ? AND club_id = ?';
-
-          connection.query(unsubscribe, [userId, clubId], (serror) => {
-
-              if(serror){
-                  console.log('error unsubscribing user from club');
-                  res.send(500);
-                  return;
-              }
-
-              res.send(200);
-              console.log('User unsubscribed from club');
-          });
-      }
-
+        res.status(200).send('User unsubscribed from club');
+        connection.release();
+      });
+    });
   });
 });
+
 
 
 
