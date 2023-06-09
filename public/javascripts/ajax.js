@@ -341,3 +341,25 @@ document.getElementById('unsubscribe').addEventListener('click', () => {
   unsub.send(JSON.stringify({ userId, clubId}));
 
 });
+
+function getUserInfo() {
+  const req = new XMLHttpRequest();
+
+  req.onreadystatechange = function () {
+    if (req.readyState === 4) {
+      if (req.status === 200) {
+        const userInfo = JSON.parse(req.responseText);
+        console.log(userInfo);
+        const name = userInfo.user_name;
+        const email = userInfo.email;
+        const nameElement = document.getElementById("name");
+        const emailElement = document.getElementById("email");
+        nameElement.innerHTML = name;
+        emailElement.innerHTML = email;
+      }
+    }
+  };
+
+  req.open('GET', '/get_current_user_info');
+  req.send();
+}

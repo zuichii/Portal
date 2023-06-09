@@ -15,6 +15,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+
 // signin post request
 // router.post('/signin', function(req, res) {
 //   req.pool.getConnection(function(err, connection) {
@@ -341,33 +342,33 @@ router.post('/update_user', function(req, res, next) {
   });
 });
 
+
 router.get('/get_current_user_info', (req, res) => {
   const userId = req.session.user.user_id;
   const sql = `SELECT user_name, email, password FROM user WHERE user_id = ${userId}`;
 
+  req.pool.getConnection(function(err, connection) {
+    connection.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error executing the SQL query:', err);
+        res.sendStatus(500);
+        return;
+      }
 
-  connection.query(sql, (err, result) => {
-    if (err) {
-      console.error('Error executing the SQL query:', err);
-      res.sendStatus(500);
-      return;
-    }
+      if (result.length == 0) {
+        res.sendStatus(404);
+      }
 
-    if (result.length === 0) {
-      res.sendStatus(404);
-      return;
-    }
+      const userInfo = {
+        user_name: result[0].user_name,
+        email: result[0].email,
+        password: result[0].password,
+      };
 
-    const userInfo = {
-      user_name: result[0].user_name,
-      email: result[0].email,
-      password: result[0].password,
-    };
-
-    res.json(userInfo);
+      res.json(userInfo);
+    });
   });
 });
-
 
 
 router.post('/subscribe', function(req, res, next){
@@ -445,5 +446,7 @@ router.post('/unsubscribe', function(req, res, next){
 
   });
 });
+
+
 
 module.exports = router;
