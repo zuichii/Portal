@@ -348,9 +348,9 @@ router.get('/get_current_user_info', (req, res) => {
   const sql = `SELECT user_name, email, password FROM user WHERE user_id = ${userId}`;
 
   req.pool.getConnection(function(err, connection) {
-    connection.query(sql, (err, result) => {
-      if (err) {
-        console.error('Error executing the SQL query:', err);
+    connection.query(sql, (ierr, result) => {
+      if (ierr) {
+        console.error('Error executing the SQL query:', ierr);
         res.sendStatus(500);
         return;
       }
@@ -371,39 +371,48 @@ router.get('/get_current_user_info', (req, res) => {
 });
 
 
-router.post('/subscribe', function(req, res, next){
+
+router.post('/subscribe', function(req, res, next) {
   const { userId, clubId } = req.body;
 
-  const check = 'SELECT * FROM club_membership WHERE user_id = ? AND club_id = ?';
+  req.pool.getConnection(function(error, connection) {
+    if (error) {
+      console.log('Error getting database connection:', error);
+      res.status(500).send('Error getting database connection');
+      return;
+    }
 
-  connection.query(check, [userId, clubId], (error, results) => {
+    const check = 'SELECT * FROM club_membership WHERE user_id = ? AND club_id = ?';
 
-      if(error){
-          console.log('error');
-          res.send(500);
+    connection.query(check, [userId, clubId], function(merror, results) {
+      if (merror) {
+        console.log('Error checking membership:', merror);
+        res.status(500).send('Error checking membership');
+        connection.release(); // Release the connection back to the pool
+        return;
+      }
+
+      if (results.length > 0) {
+        console.log('User already subscribed to the club');
+        res.status(400).send('User already subscribed to the club');
+        connection.release(); // Release the connection back to the pool
+        return;
+      }
+
+      const subscribe = 'INSERT INTO club_membership (membership_type, user_id, club_id) VALUES (?, ?, ?)';
+
+      connection.query(subscribe, ['member', userId, clubId], function(serror) {
+        connection.release(); // Release the connection back to the pool
+
+        if (serror) {
+          console.log('Error inserting membership:', serror);
+          res.status(500).send('Error inserting membership');
           return;
-      }
+        }
 
-      if(results.length > 0) {
-          res.send(400);
-          console.log('User already subscribed to the club');
-      }
-
-      else{
-
-          const subscribe = 'INSERT INTO club_membership (membership_type, user_id, club_id) VALUES (?, ?, ?)';
-
-          connection.query(subscribe, ['member', userId, clubId], (serror) => {
-
-              if(serror){
-                  console.log('error');
-                  res.send(500);
-                  return;
-              }
-
-              res.send(200);
-          });
-      }
+        res.sendStatus(200);
+      });
+    });
   });
 });
 
@@ -429,9 +438,9 @@ router.post('/unsubscribe', function(req, res, next){
 
       else{
 
-          const unsubsribe = 'DELETE FROM club_membership WHERE user_id = ? AND club_id = ?';
+          const unsubscribe = 'DELETE FROM club_membership WHERE user_id = ? AND club_id = ?';
 
-          connection.query(unsubsribe, [userId, clubId], (serror) => {
+          connection.query(unsubscribe, [userId, clubId], (serror) => {
 
               if(serror){
                   console.log('error unsubscribing user from club');
