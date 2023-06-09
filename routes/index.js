@@ -348,9 +348,9 @@ router.get('/get_current_user_info', (req, res) => {
   const sql = `SELECT user_name, email, password FROM user WHERE user_id = ${userId}`;
 
   req.pool.getConnection(function(err, connection) {
-    connection.query(sql, (err, result) => {
-      if (err) {
-        console.error('Error executing the SQL query:', err);
+    connection.query(sql, (ierr, result) => {
+      if (ierr) {
+        console.error('Error executing the SQL query:', ierr);
         res.sendStatus(500);
         return;
       }

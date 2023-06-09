@@ -187,17 +187,6 @@ function signup() {
 }
 
 
-
-function changeButtons() {
-  document.addEventListener('DOMContentLoaded', function() {
-    const loginButton = document.getElementById("login_button");
-    const dashboardButton = document.getElementById("dashboard_button");
-    loginButton.style.display = "none";
-    dashboardButton.style.display = "block";
-  });
-}
-
-
 // Updated AJAX function
 function login() {
   let logindata = {
@@ -212,10 +201,6 @@ function login() {
       if (this.status === 200) {
         window.location.href = 'home.html';
         alert('Logged in successfully');
-        console.log("now executing button change");
-        window.onload = function(){
-          changeButtons();
-        };
       } else if (this.status === 401) {
         alert('Login FAILED');
       }
@@ -359,5 +344,80 @@ function getUserInfo() {
   };
 
   req.open('GET', '/get_current_user_info');
+  req.send();
+}
+
+
+function updateUser(event) {
+  event.preventDefault(); // Prevent the form from submitting normally
+
+  // Retrieve the updated values from the input fields
+  const name = document.getElementById('name-input').value;
+  const email = document.getElementById('email-input').value;
+
+  // Prepare the data to be sent in the request
+  const data = {
+    name: name,
+    email: email
+  };
+
+  // Make an AJAX request to update the user information
+  const req = new XMLHttpRequest();
+  req.open('POST', '/update_user', true);
+  req.setRequestHeader('Content-Type', 'application/json');
+
+  req.onreadystatechange = function() {
+    if (req.readyState === XMLHttpRequest.DONE) {
+      if (req.status === 200) {
+        // Request successful, handle the response
+        const response = JSON.parse(req.responseText);
+        console.log(response.message);
+
+        // Update the display fields with the new values
+        document.getElementById('name').textContent = name;
+        document.getElementById('email').textContent = email;
+
+        // Toggle back to display mode
+        toggleEditField('name');
+        toggleEditField('email');
+      } else {
+        // Request failed, handle the error
+        console.error('Error:', req.status);
+      }
+    }
+  };
+
+  // Send the request with the data
+  req.send(JSON.stringify(data));
+}
+
+// Function to retrieve and display the user information on page load
+function getUserInfo() {
+  // Make an AJAX request to fetch the user information
+  const req = new XMLHttpRequest();
+  req.open('GET', '/get_current_user_info', true);
+  req.setRequestHeader('Content-Type', 'application/json');
+
+  req.onreadystatechange = function() {
+    if (req.readyState === XMLHttpRequest.DONE) {
+      if (req.status === 200) {
+        // Request successful, handle the response
+        const userInfo = JSON.parse(req.responseText);
+
+        // Update the display fields with the user information
+        document.getElementById('name').textContent = userInfo.user_name;
+        document.getElementById('email').textContent = userInfo.email;
+
+        // Hide the input fields initially
+        document.getElementById('name-input').style.display = 'none';
+        document.getElementById('email-input').style.display = 'none';
+      } else {
+        // Request failed, handle the error
+        console.error('Error:', req.status);
+      }
+    }
+  };
+
+  // Send the request
   req.send();
 }
