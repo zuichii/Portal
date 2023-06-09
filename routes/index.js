@@ -15,6 +15,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+
 // signin post request
 // router.post('/signin', function(req, res) {
 //   req.pool.getConnection(function(err, connection) {
@@ -314,6 +315,60 @@ router.post('/google_login', async function (req, res, next) {
   });
 });
 
+//user updates profile
+router.post('/update_user', function(req, res, next) {
+  var updated_email = req.body.email;
+  var updated_username = req.body.username;
+  var updated_password = req.body.password;
+
+  // Update the user's information in the database using database operations or queries
+  req.pool.getConnection(function(err, connection) {
+    if (err) {
+      return next(err);
+    }
+
+    var query = "UPDATE users SET email = ?, username = ?, password = ? WHERE id = ?";
+    var values = [updated_email, updated_username, updated_password, req.session.user.id];
+
+    connection.query(query, values, function(qerr, results) {
+      connection.release();
+
+      if (qerr) {
+        return next(qerr);
+      }
+
+      res.json({ message: "User information updated successfully" });
+    });
+  });
+});
+
+
+router.get('/get_current_user_info', (req, res) => {
+  const userId = req.session.user.user_id;
+  const sql = `SELECT user_name, email, password FROM user WHERE user_id = ${userId}`;
+
+  req.pool.getConnection(function(err, connection) {
+    connection.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error executing the SQL query:', err);
+        res.sendStatus(500);
+        return;
+      }
+
+      if (result.length == 0) {
+        res.sendStatus(404);
+      }
+
+      const userInfo = {
+        user_name: result[0].user_name,
+        email: result[0].email,
+        password: result[0].password,
+      };
+
+      res.json(userInfo);
+    });
+  });
+});
 
 
 
@@ -400,5 +455,7 @@ router.post('/unsubscribe', function(req, res, next){
 
   });
 });
+
+
 
 module.exports = router;
