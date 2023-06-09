@@ -12,50 +12,37 @@
     <script src="javascripts/script.js" defer></script>
     <script src="javascripts/ajax.js"></script>
     <script>
-        function toggleEditField(fieldId) {
-            var textField = document.getElementById(fieldId);
-            var inputField = document.getElementById(fieldId + "-input");
 
-            if (textField.style.display === "none") {
-                textField.style.display = "block";
-                inputField.style.display = "none";
-            } else {
-                textField.style.display = "none";
-                inputField.style.display = "block";
-            }
-        }
-
-        function removeClub(clubId) {
-            var club = document.getElementById(clubId);
-            club.parentNode.removeChild(club);
-        }
-
-
-        document.addEventListener("DOMContentLoaded", function() {
-
-            var collapseButtons = document.querySelectorAll(".collapse-button");
-
-            collapseButtons.forEach(function(button) {
-                button.addEventListener("click", function() {
-
-                    var eventDetails = button.parentElement.nextElementSibling;
-                    eventDetails.classList.toggle("show");
-
-
-                    button.textContent = eventDetails.classList.contains("show") ? "▲" : "▼";
-                });
-            });
-        });
-
-        function toggleEventDetails(eventId) {
-            var eventDetails = document.getElementById(eventId);
-            eventDetails.style.display = (eventDetails.style.display === "none") ? "block" : "none";
-        }
     </script>
 </head>
 <body>
     <header class="pure-menu pure-menu-horizontal topnav">
-        <!-- Header content goes here -->
+        <div class="pure-menu pure-menu-horizontal topnav-left">
+            <a href="home.html" class="pure-menu-heading logo"><img src="images/tree.jpg" alt="Home logo"></a>
+        </div>
+
+        <ul class="pure-menu-list topnav-right">
+            <li class="pure-menu-item">
+                <a href="explore_clubs.html">Clubs</a>
+            </li>
+            <li class="pure-menu-item">
+                <a href="explore_events.html">Events</a>
+            </li>
+            <li class="pure-menu-item">
+                <a href="about.html">About</a>
+            </li>
+
+            <li class="pure-menu-item">
+                <form class="pure-form">
+                    <input type="text" class="pure-input-rounded" />
+
+                </form>
+            </li>
+            <li class="pure-menu-item">
+                <a class="pure-button pure-button-primary" href="login.html">Login</a>
+            </li>
+
+        </ul>
     </header>
 
     <main class="dashboard">
@@ -116,6 +103,7 @@
                 <!-- Add more events as needed -->
             </div>
         </div>
+        <button type="button" class="pure-button" onclick="logout()">Log out</button>
     </main>
 
     <footer>
