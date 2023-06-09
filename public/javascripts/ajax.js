@@ -321,11 +321,11 @@ function getUserInfo() {
         const userInfo = JSON.parse(req.responseText);
         console.log(userInfo);
         const name = userInfo.user_name;
-        const email = userInfo.email;
+        const user_email = userInfo.email;
         const nameElement = document.getElementById("name");
         const emailElement = document.getElementById("email");
         nameElement.innerHTML = name;
-        emailElement.innerHTML = email;
+        emailElement.innerHTML = user_email;
       }
     }
   };
@@ -380,24 +380,6 @@ function updateUser(event) {
   req.send(JSON.stringify(data));
 }
 
-// Make an AJAX request to retrieve events data from the server
-function retrieveEvents() {
-  const req = new XMLHttpRequest();
-  req.open('GET', '/get_events', true);
-
-  req.onreadystatechange = function() {
-    if (req.readyState === 4 && req.status === 200) {
-      // Parse the response as JSON
-      const events = JSON.parse(req.responseText);
-
-      // Call the function to update the HTML with the events data
-      updateEventsHTML(events);
-    }
-  };
-
-  req.send();
-}
-
 // Function to update the HTML with the events data
 function updateEventsHTML(events) {
   // Get the main element where the events will be displayed
@@ -431,14 +413,20 @@ function updateEventsHTML(events) {
   });
 }
 
-// Call the retrieveEvents function when the page loads or when the user logs in
-document.addEventListener('DOMContentLoaded', function() {
+// Make an AJAX request to retrieve events data from the server
+function retrieveEvents() {
+  const req = new XMLHttpRequest();
+  req.open('GET', '/get_events', true);
 
-  // check if useer is logged in
+  req.onreadystatechange = function() {
+    if (req.readyState === 4 && req.status === 200) {
+      // Parse the response as JSON
+      const events = JSON.parse(req.responseText);
 
+      // Call the function to update the HTML with the events data
+      updateEventsHTML(events);
+    }
+  };
 
-
-  if (isLoggedIn) {
-    retrieveEvents();
-  }
-});
+  req.send();
+}
