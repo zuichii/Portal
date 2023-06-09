@@ -280,38 +280,37 @@ function retrieveClubId(){
 
   const params = new URLSearchParams(window.location.search);
   return params.get('id');
+
 }
 
-function retrieveUserId(){
-
-  const userId = sessionStorage.getItem('user_id');
+function retrieveUserId(req) {
+  const userId = req.session.user.user_id;
   return userId;
 }
 
 
-document.getElementById('subscribe').addEventListener('click', () => {
 
-  const userId = retrieveUserId();
+function subscribe(req) {
+  const userId = retrieveUserId(req);
   const clubId = retrieveClubId();
 
   const sub = new XMLHttpRequest();
 
-  sub.open('POST', '/subscribe');
-  sub.setRequestHeader('Content-Type', 'application/json');
-
-  sub.onload = function(){
-
-      if(sub.status === 200){
-          alert('Subscribed to' + clubId);
-      }
-
-      else{
-          alert('Error subscribing');
-      }
+  sub.onreadystatechange = function() {
+    if (sub.readyState === 4 && sub.status ===200) {
+      alert('Subscribed to ' + clubId);
+    } else if(sub.readyState === 4 && sub.status === 500){
+      alert('Error subscribing');
+    }
   };
 
-  sub.send(JSON.stringify({ userId, clubId}));
-});
+  sub.open('POST', '/subscribe');
+  sub.setRequestHeader('Content-Type', 'application/json');
+  sub.send(JSON.stringify({ userId, clubId }));
+}
+
+// document.getElementById('subscribe').addEventListener('click', subscribe);
+
 
 
 
