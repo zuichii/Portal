@@ -284,13 +284,12 @@ function retrieveClubId(){
 // }
 
 function retrieveUserId(){
-  var userid = '';
 
   let req = new XMLHttpRequest();
 
   req.onreadystatechange = function(){
       if(req.readyState == 4 && req.status == 200){
-          userid = this.userId;
+          var userDetails = JSON.parse(this.responseText);
       } else {
           alert("error");
       }
@@ -298,8 +297,11 @@ function retrieveUserId(){
 
   req.open('GET','/get_current_user_info');
   req.send();
+<<<<<<< HEAD
   console.log(userid);
   return userid;
+=======
+>>>>>>> e6f9be49e0205b6dc0df03f047ed74d88ca5f84c
 }
 
 
@@ -307,7 +309,7 @@ function subscriptionToggler() {
   const button = document.getElementById('subscribe');
   const ifSubbed = button.textContent === 'Subscribe';
 
-  const userId = retrieveUserId();
+  const userId = retrieveUserId().userDetails.user_id;
   const clubId = retrieveClubId();
 
   const toggle = new XMLHttpRequest();
