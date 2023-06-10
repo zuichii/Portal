@@ -45,11 +45,6 @@ app.use(session({
 }));
 
 app.use(function(req, res, next) {
-  if (req.session.user) {
-    console.log("The current user is: " + req.session.user.user_id);
-  } else {
-    console.log("No user logged in");
-  }
   next();
 });
 
@@ -75,7 +70,7 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error', {
-    title: 'Error', // Add this line to define the title variable
+    title: 'Error' // Add this line to define the title variable
   });
 });
 

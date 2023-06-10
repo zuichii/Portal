@@ -208,7 +208,9 @@ router.post('/createacc', function(req, res, next) {
 
         return res.sendStatus(200);
       });
+    return res.sendStatus(200);
     });
+  return res.sendStatus(404);
   });
 });
 
@@ -241,10 +243,9 @@ router.post('/login', async function(req, res) {
 
             if (isMatch) {
               req.session.user = user;
-              res.status(200).json(user);
-            } else {
-              res.sendStatus(401);
+              return res.status(200).json(user);
             }
+            return res.sendStatus(401);
           });
         } else {
           res.sendStatus(401);
@@ -302,7 +303,7 @@ router.post('/google_login', async function (req, res, next) {
   });
 });
 
-//user updates profile
+// user updates profile
 router.post('/update_user', function(req, res, next) {
   var updated_email = req.body.email;
   var updated_username = req.body.username;
@@ -324,8 +325,9 @@ router.post('/update_user', function(req, res, next) {
         return next(qerr);
       }
 
-      res.sendStatus(200);
+      return res.sendStatus(200);
     });
+    return res.sendStatus(200);
   });
 });
 

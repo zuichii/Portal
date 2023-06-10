@@ -10,11 +10,16 @@ router.get('/', function(req, res, next) {
 
 
 router.post('/create-event', (req, res, next) => {
-  const { eventName, dateTime, location, desc, clubId } = req.body;
+  const {
+    eventName,
+    dateTime,
+    location,
+    desc,
+    clubId
+  } = req.body;
 
   req.pool.getConnection((error, connection) => {
     if (error) {
-      console.log('Error getting database connection:', error);
       res.status(500).send('Error getting database connection');
       return;
     }
@@ -26,12 +31,10 @@ router.post('/create-event', (req, res, next) => {
       connection.release();
 
       if (eerror) {
-        console.log('Error creating event:', eerror);
         res.status(500).send('Error creating event.');
         return;
       }
 
-      console.log('Event created.');
       res.sendStatus(200);
     });
   });

@@ -1,452 +1,503 @@
-// ajax request to dynamically load the content of club_profile page
-function getClubProfile() {
-  var urlParams = new URLSearchParams(window.location.search);
-  var clubId = urlParams.get('id');
-  var xhttp = new XMLHttpRequest();
+var express = require('express');
+var router = express.Router();
 
-  xhttp.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-      var clubData = JSON.parse(this.responseText);
 
-      document.getElementById('clubName').innerText = clubData.club_name;
-      document.getElementById('clubStats').innerText = '@' + clubData.club_name + ' ' + clubData.num_members + ' MEMBERS ' + clubData.num_posts + ' POSTS';
-      document.getElementById('clubLogo').src = "/images/club" + clubId + ".png";
 
-      var hero = document.querySelector('.clubHero');
-      hero.style.backgroundImage = 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/images/club' + clubId + '.png")';
-    }
-  };
+const CLIENT_ID = 'MY-CLIENT-ID.routers.googleusercontent.com';
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(CLIENT_ID);
 
-  xhttp.open('GET', '/club_profile?id=' + clubId, true);
-  xhttp.send();
-}
-// call the function after page loads
-window.addEventListener('DOMContentLoaded', getClubProfile);
 
 
 
-function loadClubPosts() {
-  var urlParams = new URLSearchParams(window.location.search);
-  var clubId = urlParams.get('id');
+/* GET home page. */
+router.get('/', function (req, res, next) {
+  res.render('index', { title: 'Express' });
+});
 
-  var xhttp = new XMLHttpRequest();
 
-  xhttp.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-      var postsData = JSON.parse(this.responseText);
-      var postContainer = document.getElementById('clubContent');
-
-      // Clear the existing content
-      postContainer.innerHTML = '';
-
-      // Create and append the posts
-      for (var i = 0; i < postsData.length; i++) {
-        var post = postsData[i];
-        var postElement = document.createElement('div');
-        postElement.classList.add('post');
-
-        var title = document.createElement('h4');
-        title.innerText = post.post_title;
-
-        var content = document.createElement('p');
-        content.innerText = post.post_content;
-
-        postElement.appendChild(title);
-        postElement.appendChild(content);
-
-        postContainer.appendChild(postElement);
-      }
-    }
-  };
-
-  xhttp.open('GET', '/get_posts?id=' + clubId, true);
-  xhttp.send();
-}
-
-window.addEventListener('DOMContentLoaded', loadClubPosts);
-
-
-
-
-function loadClubEvents() {
-  var urlParams = new URLSearchParams(window.location.search);
-  var clubId = urlParams.get('id');
-  var xhttp = new XMLHttpRequest();
-
-  xhttp.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-      var eventsData = JSON.parse(this.responseText);
-      var eventContainer = document.getElementById('clubContent');
-
-      // Clear the existing content
-      eventContainer.innerHTML = '';
-
-      // Create and append the events
-      for (var i = 0; i < eventsData.length; i++) {
-        var event = eventsData[i];
-        var eventElement = document.createElement('div');
-        eventElement.classList.add('event');
-
-        var title = document.createElement('h4');
-        title.innerText = event.event_name;
-
-        var date = document.createElement('p');
-        date.innerText = event.event_datetime;
-
-        var location = document.createElement('p');
-        location.innerText = event.event_location;
-
-        eventElement.appendChild(title);
-        eventElement.appendChild(date);
-        eventElement.appendChild(location);
-
-        eventContainer.appendChild(eventElement);
-      }
-    }
-  };
-
-  xhttp.open('GET', '/get_events?id=' + clubId, true);
-  xhttp.send();
-}
-
-
-
-function loadClubDescription() {
-  var urlParams = new URLSearchParams(window.location.search);
-  var clubId = urlParams.get('id');
-  var xhttp = new XMLHttpRequest();
-
-  xhttp.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-      var clubData = JSON.parse(this.responseText);
-      var descriptionContainer = document.getElementById('clubContent');
-
-      // Clear the existing content
-      descriptionContainer.innerHTML = '';
-
-      // Create and append the description
-      var description = document.createElement('p');
-      description.innerText = clubData.club_description;
-
-      descriptionContainer.appendChild(description);
-    }
-  };
-
-  xhttp.open('GET', '/get_club_description?id=' + clubId, true);
-  xhttp.send();
-}
-
-
-
-function signup() {
-  const email = document.getElementById('email').value;
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  const passwordConfirm = document.getElementById('passwordConfirm').value;
-
-  // Check if any field is empty
-  if (!email || !username || !password || !passwordConfirm) {
-    alert('Please fill in all fields');
-    return;
-  }
-
-  // Check if the email is valid
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    alert('Please enter a valid email address');
-    return;
-  }
-
-  if (password !== passwordConfirm) {
-    alert("Passwords don't match");
-    return;
-  }
-
-  const logindata = {
-    email,
-    username,
-    password
-  };
-
-  const req = new XMLHttpRequest();
-  req.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      window.location.href = 'login.html';
-      alert('Signed up successfully');
-    } else if (this.status === 401) {
-      alert('Signed up failed');
-    }
-  };
-
-  req.open('POST', '/createacc');
-  req.setRequestHeader('Content-Type', 'application/json');
-  req.send(JSON.stringify(logindata));
-}
-
-
-// Updated AJAX function
-function login() {
-  let logindata = {
-    username: document.getElementById('username').value,
-    password: document.getElementById('password').value
-  };
-
-  let req = new XMLHttpRequest();
-
-  req.onreadystatechange = function() {
-    if (this.readyState === 4) {
-      if (this.status === 200) {
-        window.location.href = 'home.html';
-        alert('Logged in successfully');
-      } else if (this.status === 401) {
-        alert('Login FAILED');
-      }
-    }
-  };
-
-  req.open('POST', '/login');
-  req.setRequestHeader('Content-Type', 'application/json');
-  req.send(JSON.stringify(logindata));
-
-}
-
-
-function logout() {
-  let req = new XMLHttpRequest();
-
-  req.onreadystatechange = function(){
-      if(this.readyState === 4 && this.status === 200){
-          alert('Logged Out');
-          window.location.href = 'home.html';
-      } else if(this.readyState === 4 && this.status === 403){
-          alert('Not logged in');
-      }
-  };
-
-  req.open('POST','/logout');
-  req.send();
-
-}
-
-
-
-function do_google_login(response){
-
-  // Sends the login token provided by google to the server for verification using an AJAX request
-
-  // Setup AJAX request
-  let req = new XMLHttpRequest();
-
-  req.onreadystatechange = function(){
-      // Handle response from our server
-      if(req.readyState === 4 && req.status === 200){
-          alert('Logged In with Google successfully');
-      } else if(req.readyState === 4 && req.status === 401){
-          alert('Login FAILED');
-      }
-  };
-
-  // Open requst
-  req.open('POST','/google_login');
-  req.setRequestHeader('Content-Type','application/json');
-  // Send the login token
-  req.send(JSON.stringify(response));
-
-}
-
-
-
-function retrieveClubId(){
-
-  const params = new URLSearchParams(window.location.search);
-  return params.get('id');
-
-}
-
-
-function subscriptionToggler() {
-  const button = document.getElementById('subscribe');
-  const ifSubbed = button.textContent === 'Subscribe';
-
-  // const userId = retrieveUserId().userDetails.user_id;
-  const clubId = retrieveClubId();
-
-  const toggle = new XMLHttpRequest();
-
-  toggle.open('POST', ifSubbed ? '/subscribe' : '/unsubscribe');
-  toggle.setRequestHeader('Content-Type', 'application/json');
-
-  toggle.onload = function() {
-    if (toggle.status === 200) {
-      if (ifSubbed) {
-        alert('Subscribed to ' + clubId);
-      } else {
-        alert('Unsubscribed from ' + clubId);
-      }
-      window.location.reload(); // Reload the page
-    }
-  };
-
-  toggle.send(JSON.stringify({ clubId }));
-
-  button.textContent = ifSubbed ? 'Unsubscribe' : 'Subscribe';
-}
-
-function getUserInfo() {
-  const req = new XMLHttpRequest();
-
-  req.onreadystatechange = function () {
-    if (req.readyState === 4) {
-      if (req.status === 200) {
-        const userInfo = JSON.parse(req.responseText);
-        const name = userInfo.user_name;
-        const user_email = userInfo.email;
-        const nameElement = document.getElementById("name");
-        const emailElement = document.getElementById("email");
-        nameElement.innerHTML = name;
-        emailElement.innerHTML = user_email;
-      }
-    }
-  };
-
-  req.open('GET', '/get_current_user_info');
-  req.send();
-}
-
-
-
-
-document.getElementById('updateForm').addEventListener('submit', function(event) {
-  event.preventDefault(); // Prevent the form from submitting normally
-
-  // Retrieve the updated values from the input fields
-  const name = document.getElementById('name-input').value;
-  const email = document.getElementById('email-input').value;
-
-  // Prepare the data to be sent in the request
-  const data = {
-    name: name,
-    email: email
-  };
-
-
-
-//   // Make an AJAX request to update the user information
-//   const req = new XMLHttpRequest();
-//   req.open('POST', '/update_user', true);
-//   req.setRequestHeader('Content-Type', 'application/json');
-
-//   req.onreadystatechange = function() {
-//     if (req.readyState === 4) {
-//       if (req.status === 200) {
-//         // Request successful, handle the response
-//         const response = JSON.parse(req.responseText);
-
-//         // Update the display fields with the new values
-//         document.getElementById('name').textContent = name;
-//         document.getElementById('email').textContent = email;
-
-//         // Toggle back to display mode
-//         toggleEditField('name');
-//         toggleEditField('email');
-//       } else {
-//         // Request failed, handle the error
-//         console.error('Error:', req.status);
-//       }
+// signin post request
+// router.post('/signin', function(req, res) {
+//   req.pool.getConnection(function(err, connection) {
+//     if(err){
+//       res.sendStatus(500);
+//       return;
 //     }
-//   };
+//     var username = req.body.username;
+//     var password = req.body.password;
+//     var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
+//     connection.query(query, [username, password], function(qerr, results) {
+//       connection.release();
+//       if(qerr){
+//         res.sendStatus(500);
+//         return;
+//       }
+//       if(results.length === 1){
+//         res.sendStatus(200);
+//       } else {
+//         res.sendStatus(401);
+//       }
+//     });
+//   });
+// });
 
-  // Send the request with the data
-  req.send(JSON.stringify(data));
-}
 
-// Make an AJAX request to retrieve events data from the server
-function retrieveEvents() {
-  const req = new XMLHttpRequest();
-  req.open('GET', '/get_events', true);
+router.get('/club_profile', function (req, res, next) {
+  var clubId = req.query.id;
 
-  req.onreadystatechange = function() {
-    if (req.readyState === 4 && req.status === 200) {
-      // Parse the response as JSON
-      const events = JSON.parse(req.responseText);
-
-      // Call the function to update the HTML with the events data
-      updateEventsHTML(events);
+  req.pool.getConnection(function(err, connection) {
+    if (err) {
+      res.status(500).send('Internal Server Error');
+      return;
     }
-  };
 
-  req.send();
-}
-
-// Function to update the HTML with the events data
-function updateEventsHTML(events) {
-  // Get the main element where the events will be displayed
-  const mainElement = document.querySelector('main.explore_events');
-
-  // Clear the existing content
-  mainElement.innerHTML = '';
-
-  // Loop through the events data and create HTML elements for each event
-  events.forEach(function(event) {
-    const boxContent = document.createElement('div');
-    boxContent.className = 'box_content';
-
-    const box = document.createElement('div');
-    box.className = 'box';
-    const clubLogo = document.createElement('img');
-    clubLogo.src = event.club_logo;
-    clubLogo.alt = 'club logo';
-    box.appendChild(clubLogo);
-    boxContent.appendChild(box);
-
-    const eventName = document.createElement('h3');
-    eventName.textContent = event.event_name;
-    boxContent.appendChild(eventName);
-
-    const eventDate = document.createElement('h6');
-    eventDate.textContent = event.event_date;
-    boxContent.appendChild(eventDate);
-
-    mainElement.appendChild(boxContent);
-  });
-}
-
-// Call the retrieveEvents function when the page loads or when the user logs in
-document.addEventListener('DOMContentLoaded', function() {
-
-  // check if useer is logged in
-
-  // check if useer is logged in
-
-  function createEvent() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var clubId = urlParams.get('id');
-
-    const eventName = document.getElementById('event-name').value;
-    const dateTime = document.getElementById('event-dateTime').value;
-    const location = document.getElementById('event-location').value;
-    const desc = document.getElementById('event-description').value;
-
-    var eventData = {
-      eventName: eventName,
-      dateTime: dateTime,
-      location: location,
-      desc: desc,
-      clubId: clubId
-    };
-
-    var xhr = new XMLHttpRequest();
-
-    xhr.open('POST', '/create-event');
-
-    xhr.setRequestHeader('Content-type', 'application/json');
-
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        alert('Event created.');
-      } else {
-        alert('Event could not be created.');
+    // get club data
+    var clubQuery = "SELECT club_name, club_description FROM club WHERE club_id = ?";
+    connection.query(clubQuery, [clubId], function(qerr, clubRows) {
+      if (qerr) {
+        connection.release();
+        res.status(500).send('Internal Server Error');
+        return;
       }
-    };
 
-    xhr.send(JSON.stringify(eventData));
+      if (clubRows.length > 0) {
+        var clubData = clubRows[0];
+
+        // get number of posts
+        var postsQuery = "SELECT COUNT(*) AS num_posts FROM post WHERE club_id = ?";
+        connection.query(postsQuery, [clubId], function(perr, postsRows) {
+          if (perr) {
+            connection.release();
+            res.status(500).send('Internal Server Error');
+            return;
+          }
+
+          if (postsRows.length > 0) {
+            clubData.num_posts = postsRows[0].num_posts;
+          } else {
+            clubData.num_posts = 0;
+          }
+
+          // get number of members
+          var membersQuery = "SELECT COUNT(*) AS num_members FROM club_membership WHERE club_id = ?";
+          connection.query(membersQuery, [clubId], function(merr, membersRows) {
+            connection.release();
+            if (merr) {
+              res.status(500).send('Internal Server Error');
+              return;
+            }
+
+            if (membersRows.length > 0) {
+              clubData.num_members = membersRows[0].num_members;
+            } else {
+              clubData.num_members = 0;
+            }
+
+            res.json(clubData);
+          });
+        });
+      } else {
+        connection.release();
+        res.sendStatus(404);
+      }
+    });
+  });
+});
+
+
+router.get('/get_posts', function(req, res, next) {
+  var clubId = req.query.id;
+
+  // Query the database to fetch posts for the given club_id
+  var query = 'SELECT * FROM post WHERE club_id = ?';
+  req.pool.query(query, [clubId], function(err, results) {
+    if (err) {
+      res.status(500).json({ error: 'Failed to fetch posts.' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+
+router.get('/get_events', function(req, res, next) {
+  var clubId = req.query.id;
+
+  // Query the database to fetch posts for the given club_id
+  var query = 'SELECT * FROM event WHERE club_id = ?';
+  req.pool.query(query, [clubId], function(err, results) {
+    if (err) {
+      res.status(500).json({ error: 'Failed to fetch events.' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+
+
+router.get('/get_club_description', function(req, res, next) {
+  var clubId = req.query.id;
+
+  // Query the database to fetch posts for the given club_id
+  var query = 'SELECT * FROM club WHERE club_id = ?';
+  req.pool.query(query, [clubId], function(err, results) {
+    if (err) {
+      res.status(500).json({ error: 'Failed to fetch events.' });
+    } else {
+      var clubData = {
+        club_description: results[0].club_description
+      };
+      res.json(clubData);
+    }
+  });
+});
+
+
+const bcrypt = require('bcrypt');
+
+
+router.post('/createacc', function(req, res, next) {
+  const { username, email, password } = req.body;
+
+  // Check if the username or email already exists in the database
+  var query = 'SELECT * FROM user WHERE user_name = ? OR email = ?';
+  req.pool.query(query, [username, email], function(error, results) {
+    if (error) {
+      return res.sendStatus(500);
+    }
+
+    if (results.length > 0) {
+      // Check if the username is already taken
+      const isUsernameTaken = results.some(function(user) {
+        return user.user_name === username;
+      });
+
+      if (isUsernameTaken) {
+        return res.sendStatus(401);
+      }
+
+      // Check if the email is already taken
+      const isEmailTaken = results.some(function(user) {
+        return user.email === email;
+      });
+
+      if (isEmailTaken) {
+        return res.sendStatus(402);
+      }
+    }
+
+    // Hash the password
+    bcrypt.hash(password, 10, function(err, hashedPassword) {
+      if (err) {
+        return res.sendStatus(500);
+      }
+
+      // Insert the new user into the database with the hashed password
+      const newUser = {
+        user_name: username,
+        email: email,
+        password: hashedPassword
+      };
+
+      var insertquery = 'INSERT INTO user SET ?';
+      req.pool.query(insertquery, newUser, function(ierror) {
+        if (ierror) {
+          return res.sendStatus(500);
+        }
+
+        return res.sendStatus(200);
+      });
+      return res.sendStatus(200);
+    });
+  return res.sendStatus(200);
+  });
+});
+
+
+router.post('/login', async function(req, res) {
+  if ('username' in req.body && 'password' in req.body) {
+    req.pool.getConnection(function(err, connection) {
+      if (err) {
+        res.sendStatus(500);
+        return;
+      }
+
+      var { username, password } = req.body;
+      var query = "SELECT * FROM user WHERE user_name = ?";
+
+      connection.query(query, [username], function(qerr, results) {
+        connection.release();
+
+        if (qerr) {
+          res.sendStatus(500);
+          return;
+        }
+
+        if (results.length === 1) {
+          var user = results[0];
+          bcrypt.compare(password, user.password, function(bcryptErr, isMatch) {
+            if (bcryptErr) {
+              return res.sendStatus(500);
+            }
+
+            if (isMatch) {
+              req.session.user = user;
+              return res.status(200).json(user);
+            }
+            return res.sendStatus(401);
+          });
+        } else {
+          res.sendStatus(401);
+        }
+      });
+    });
+  } else {
+    res.sendStatus(401);
+  }
+});
+
+router.post('/logout', function (req, res, next) {
+  if ('user' in req.session) {
+    delete req.session.user;
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+
+router.post('/google_login', async function (req, res, next) {
+  const ticket = await client.verifyIdToken({
+    idToken: req.body.credential,
+    audience: CLIENT_ID
+  });
+
+  const payload = ticket.getPayload();
+  const { email } = payload;
+
+  // Search for user by email in the database
+  req.pool.getConnection(function (err, connection) {
+    if (err) {
+      res.sendStatus(500);
+      return;
+    }
+
+    var query = "SELECT * FROM user WHERE email = ?";
+    connection.query(query, [email], function (qerr, results) {
+      connection.release();
+
+      if (qerr) {
+        res.sendStatus(500);
+        return;
+      }
+
+      if (results.length === 1) {
+        var user = results[0];
+        req.session.user = user;
+        res.json(user);
+      } else {
+        res.sendStatus(401);
+      }
+    });
+  });
+});
+
+
+router.get('/get_current_user_info', (req, res) => {
+  const userId = req.session.user.user_id;
+  const sql = `SELECT user_name, email, password FROM user WHERE user_id = ${userId}`;
+
+  req.pool.getConnection(function(err, connection) {
+    connection.query(sql, (ierr, result) => {
+      if (ierr) {
+        res.sendStatus(500);
+        return;
+      }
+
+      if (result.length === 0) {
+        res.sendStatus(404);
+      }
+
+      const userInfo = {
+        user_id: result[0].user_id,
+        user_name: result[0].user_name,
+        email: result[0].email,
+        password: result[0].password
+      };
+
+      res.json(userInfo);
+    });
+  });
+});
+
+
+
+router.post('/subscribe', function (req, res, next) {
+  const userId = req.session.user.user_id;
+  const { clubId } = req.body;
+
+  req.pool.getConnection(function (error, connection) {
+    if (error) {
+      res.status(500).send('Error getting database connection');
+      return;
+    }
+
+    const check = 'SELECT * FROM club_membership WHERE user_id = ? AND club_id = ?';
+
+    connection.query(check, [userId, clubId], function (merror, results) {
+      if (merror) {
+        res.status(500).send('Error checking membership');
+        connection.release(); // Release the connection back to the pool
+        return;
+      }
+
+      if (results.length > 0) {
+        res.status(400).send('User already subscribed to the club');
+        connection.release(); // Release the connection back to the pool
+        return;
+      }
+
+      const subscribe = 'INSERT INTO club_membership (membership_type, user_id, club_id) VALUES (?, ?, ?)';
+
+      connection.query(subscribe, ['member', userId, clubId], function (serror) {
+        connection.release(); // Release the connection back to the pool
+
+        if (serror) {
+          res.status(500).send('Error inserting membership');
+          return;
+        }
+
+        res.sendStatus(200);
+      });
+    });
+  });
+});
+
+
+router.post('/unsubscribe', function (req, res, next) {
+  const userId = req.session.user.user_id;
+  const { clubId } = req.body;
+
+  req.pool.getConnection((err, connection) => {
+    if (err) {
+      res.status(500).send('error getting database connection');
+      return;
+    }
+
+    const check = 'SELECT * FROM club_membership WHERE user_id = ? AND club_id = ?';
+
+    connection.query(check, [userId, clubId], (error, results) => {
+      if (error) {
+        res.status(500).send('error');
+        connection.release();
+        return;
+      }
+
+      if (results.length === 0) {
+        res.status(400).send('User is not subscribed to the club');
+        connection.release();
+        return;
+      }
+
+      const unsubscribe = 'DELETE FROM club_membership WHERE user_id = ? AND club_id = ?';
+
+      connection.query(unsubscribe, [userId, clubId], (serror) => {
+        if (serror) {
+          res.status(500).send('error unsubscribing user from club');
+          connection.release();
+          return;
+        }
+
+        res.status(200).send('User unsubscribed from club');
+        connection.release();
+      });
+    });
+  });
+});
+
+router.post('/update_user', function(req, res, next) {
+  const current_user = req.session.user.user_id;
+  const { name, email } = req.body;
+
+  req.pool.getConnection(function(err, connection) {
+    if (err) {
+      res.status(500).send('Error getting database connection');
+      return;
+    }
+
+    // Check if the new username or email already exists in the database
+    const query = 'SELECT * FROM user WHERE (user_name = ? OR email = ?) AND user_id != ?';
+    connection.query(query, [name, email, current_user], function(error, results) {
+      if (error) {
+        connection.release();
+        res.status(500).send('Error updating data');
+        return;
+      }
+
+      if (results.length > 0) {
+        // Check if the username is already taken
+        const isUsernameTaken = results.some(function(user) {
+          return user.user_name === name;
+        });
+
+        if (isUsernameTaken) {
+          connection.release();
+          res.status(401).send('Username is already taken');
+          return;
+        }
+
+        // Check if the email is already taken
+        const isEmailTaken = results.some(function(user) {
+          return user.email === email;
+        });
+
+        if (isEmailTaken) {
+          connection.release();
+          res.status(402).send('Email is already taken');
+          return;
+        }
+      }
+
+      // Update the user's data
+      const updateQuery = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
+      connection.query(updateQuery, [name, email, current_user], function(updateResult) {
+        connection.release();
+        if (error) {
+          res.status(500).send('Error updating data');
+          return;
+        }
+
+        res.redirect('/dashboard.html');
+      });
+    });
+  });
+});
+
+
+router.post('/create_event', function(req, res, next) {
+  const {
+    event_name, event_datetime, event_location, event_desc, club_id
+  } = req.body;
+
+  req.pool.getConnection(function(err, connection) {
+    if (err) {
+      res.status(500).send('Error getting database connection');
+      return;
+    }
+
+    const query = 'INSERT INTO events (event_name, event_datetime, event_location, event_desc, club_id) VALUES (?, ?, ?, ?, ?)';
+    connection.query(query, [event_name, event_datetime,
+      event_location, event_desc, club_id], function(error) {
+      connection.release();
+      if (error) {
+        res.status(500).send('Error creating event');
+        return;
+      }
+
+      res.sendStatus(200);
+    });
+  });
+});
+
+module.exports = router;
