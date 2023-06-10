@@ -252,7 +252,6 @@ router.post('/login', async function (req, res) {
 
             if (isMatch) {
               req.session.user = user;
-              console.log("User logged in:", user.user_name);
               res.status(200).json(user);
             } else {
               res.sendStatus(401);
@@ -306,7 +305,6 @@ router.post('/google_login', async function (req, res, next) {
       if (results.length === 1) {
         var user = results[0];
         req.session.user = user;
-        console.log("User logged in:", user.user_name);
         res.json(user);
       } else {
         res.sendStatus(401);
@@ -380,7 +378,6 @@ router.post('/subscribe', function (req, res, next) {
 
   req.pool.getConnection(function (error, connection) {
     if (error) {
-      console.log('Error getting database connection:', error);
       res.status(500).send('Error getting database connection');
       return;
     }
@@ -389,14 +386,12 @@ router.post('/subscribe', function (req, res, next) {
 
     connection.query(check, [userId, clubId], function (merror, results) {
       if (merror) {
-        console.log('Error checking membership:', merror);
         res.status(500).send('Error checking membership');
         connection.release(); // Release the connection back to the pool
         return;
       }
 
       if (results.length > 0) {
-        console.log('User already subscribed to the club');
         res.status(400).send('User already subscribed to the club');
         connection.release(); // Release the connection back to the pool
         return;
@@ -408,7 +403,6 @@ router.post('/subscribe', function (req, res, next) {
         connection.release(); // Release the connection back to the pool
 
         if (serror) {
-          console.log('Error inserting membership:', serror);
           res.status(500).send('Error inserting membership');
           return;
         }
@@ -426,7 +420,6 @@ router.post('/unsubscribe', function (req, res, next) {
 
   req.pool.getConnection((err, connection) => {
     if (err) {
-      console.log('error getting database connection');
       res.status(500).send('error getting database connection');
       return;
     }
@@ -435,7 +428,6 @@ router.post('/unsubscribe', function (req, res, next) {
 
     connection.query(check, [userId, clubId], (error, results) => {
       if (error) {
-        console.log('error');
         res.status(500).send('error');
         connection.release();
         return;
@@ -451,7 +443,6 @@ router.post('/unsubscribe', function (req, res, next) {
 
       connection.query(unsubscribe, [userId, clubId], (serror) => {
         if (serror) {
-          console.log('error unsubscribing user from club');
           res.status(500).send('error unsubscribing user from club');
           connection.release();
           return;
@@ -483,41 +474,5 @@ router.post('/update_user', function (req, res, next) {
     });
   });
 });
-
-router.get('/user/events', function (req, res) {
-  const userId = req.session.userId;
-
-  const query = `
-    SELECT e.event_name, e.event_date
-    FROM events e
-    INNER JOIN club_membership m ON e.club_id = m.club_id
-    WHERE m.user_id = ?;
-  `;
-
-  req.pool.getConnection(function (err, connection) {
-    if (err) {
-      console.log('Error getting database connection:', err);
-      res.status(500).send('Error getting database connection');
-      return;
-    }
-
-    connection.query(query, [userId], function (error, results) {
-      connection.release(); // Release the connection back to the pool
-
-      if (error) {
-        console.log('Error fetching events:', error);
-        res.status(500).send('Error fetching events');
-        return;
-      }
-
-      res.json(results);
-    });
-  });
-});
-
-
-
-
-
 
 module.exports = router;
