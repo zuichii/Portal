@@ -477,8 +477,4 @@ router.post('/create_event', function(req, res, next) {
   });
 });
 
-
-
-
-
 module.exports = router;
