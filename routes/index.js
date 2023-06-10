@@ -457,42 +457,7 @@ router.post('/update_user', function(req,res,next) {
       if(error){
         res.status(500).send('error changing data');
       }
-
-      if (results.length > 0) {
-        // Check if the username is already taken
-        const isUsernameTaken = results.some(function(user) {
-          return user.user_name === name;
-        });
-
-        if (isUsernameTaken) {
-          connection.release();
-          res.status(401).send('Username is already taken');
-          return;
-        }
-
-        // Check if the email is already taken
-        const isEmailTaken = results.some(function(user) {
-          return user.email === email;
-        });
-
-        if (isEmailTaken) {
-          connection.release();
-          res.status(402).send('Email is already taken');
-          return;
-        }
-      }
-
-      // Update the user's data
-      const updateQuery = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
-      connection.query(updateQuery, [name, email, current_user], function(error, updateResult) {
-        connection.release();
-        if (error) {
-          res.status(500).send('Error updating data');
-          return;
-        }
-
-        res.redirect('/dashboard.html');
-      });
+      res.sendStatus(200);
     });
   });
 });
