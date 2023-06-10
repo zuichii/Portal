@@ -6,4 +6,37 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
+
+
+
+router.post('/create-event', (req, res, next) => {
+  const { eventName, dateTime, location, desc, clubId } = req.body;
+
+  req.pool.getConnection((error, connection) => {
+    if (error) {
+      console.log('Error getting database connection:', error);
+      res.status(500).send('Error getting database connection');
+      return;
+    }
+
+    const eventQuery = 'INSERT INTO event (event_name, event_datetime, event_location, event_desc, club_id) VALUES (?, ?, ?, ?, ?)';
+    const eventValues = [eventName, dateTime, location, desc, clubId];
+
+    connection.query(eventQuery, eventValues, (eerror, results) => {
+      connection.release();
+
+      if (eerror) {
+        console.log('Error creating event:', eerror);
+        res.status(500).send('Error creating event.');
+        return;
+      }
+
+      console.log('Event created.');
+      res.sendStatus(200);
+    });
+  });
+});
+
+
+
 module.exports = router;
