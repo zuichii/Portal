@@ -28,6 +28,7 @@ window.addEventListener('DOMContentLoaded', getClubProfile);
 function loadClubPosts() {
   var urlParams = new URLSearchParams(window.location.search);
   var clubId = urlParams.get('id');
+  console.log('loadPosts function called with clubId:', clubId);
   var xhttp = new XMLHttpRequest();
 
   xhttp.onreadystatechange = function() {
@@ -230,6 +231,8 @@ function logout() {
 
 
 function do_google_login(response){
+  // Sends the login token provided by google to the server for verification using an AJAX request
+  console.log(response);
   // Setup AJAX request
   let req = new XMLHttpRequest();
 
@@ -263,6 +266,7 @@ function retrieveClubId(){
 function subscriptionToggler() {
   const button = document.getElementById('subscribe');
   const ifSubbed = button.textContent === 'Subscribe';
+  // const userId = retrieveUserId().userDetails.user_id;
   const clubId = retrieveClubId();
 
   const toggle = new XMLHttpRequest();
@@ -282,31 +286,27 @@ function subscriptionToggler() {
   };
 
   toggle.send(JSON.stringify({ clubId }));
-
-  // Replace the subscribe button with unsubscribe button if the user is subscribed
-  if (ifSubbed) {
-    button.textContent = 'Unsubscribe';
-  }
+  button.textContent = ifSubbed ? 'Unsubscribe' : 'Subscribe';
 }
 
 function getUserInfo() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      var userInfo = JSON.parse(this.responseText);
-      var name = userInfo.user_name;
-      var userEmail = userInfo.email;
-      var nameElement = document.getElementById('name');
-      var emailElement = document.getElementById('email');
-      nameElement.innerHTML = name;
-      emailElement.innerHTML = userEmail;
-
-      // Call the loadClubEvents function
-      loadClubEvents();
+  const req = new XMLHttpRequest();
+  req.onreadystatechange = function () {
+    if (req.readyState === 4) {
+      if (req.status === 200) {
+        const userInfo = JSON.parse(req.responseText);
+        console.log(userInfo);
+        const name = userInfo.user_name;
+        const user_email = userInfo.email;
+        const nameElement = document.getElementById("name");
+        const emailElement = document.getElementById("email");
+        nameElement.innerHTML = name;
+        emailElement.innerHTML = user_email;
+      }
     }
   };
-  xhttp.open('GET', '/get_current_user_info', true);
-  xhttp.send();
+  req.open('GET', '/get_current_user_info');
+  req.send();
 }
 
 
@@ -363,6 +363,8 @@ function retrieveEvents() {
   req.setRequestHeader('Content-Type', 'application/json');
   req.onload = function() {
     if (req.status === 200) {
+      const response = JSON.parse(req.responseText);
+      console.log(response.message);
 
   req.onreadystatechange = function() {
     if (req.readyState === 4 && req.status === 200) {
@@ -370,78 +372,40 @@ function retrieveEvents() {
       const events = JSON.parse(req.responseText);
 
       window.location.reload(); // Reload the current page
+    } else {
+      console.error('Error:', req.status);
     }
   };
 
-  req.send();
-}
-
-// Function to update the HTML with the events data
-function updateEventsHTML(events) {
-  // Get the main element where the events will be displayed
-  const mainElement = document.querySelector('main.explore_events');
-
-  // Clear the existing content
-  mainElement.innerHTML = '';
-
-  // Loop through the events data and create HTML elements for each event
-  events.forEach(function(event) {
-    const boxContent = document.createElement('div');
-    boxContent.className = 'box_content';
-
-    const box = document.createElement('div');
-    box.className = 'box';
-    const clubLogo = document.createElement('img');
-    clubLogo.src = event.club_logo;
-    clubLogo.alt = 'club logo';
-    box.appendChild(clubLogo);
-    boxContent.appendChild(box);
-
-    const eventName = document.createElement('h3');
-    eventName.textContent = event.event_name;
-    boxContent.appendChild(eventName);
-
-    const eventDate = document.createElement('h6');
-    eventDate.textContent = event.event_date;
-    boxContent.appendChild(eventDate);
-
-    mainElement.appendChild(boxContent);
-  });
-}
-
-// Call the retrieveEvents function when the page loads or when the user logs in
-document.addEventListener('DOMContentLoaded', function() {
+  // Send the request with the data
+  req.send(JSON.stringify(data));
+});
 
   // check if useer is logged in
 
 function createEvent() {
-  const event_name = document.getElementById('event-name').value;
-  const event_datetime = document.getElementById('event-dateTime').value;
-  const event_location = document.getElementById('event-location').value;
-  const event_desc = document.getElementById('event-description').value;
-  const club_id = 1; // Replace with the actual club_id value
-
-  const data = {
-    event_name: event_name,
-    event_datetime: event_datetime,
-    event_location: event_location,
-    event_desc: event_desc,
-    club_id: club_id
+  var urlParams = new URLSearchParams(window.location.search);
+  var clubId = urlParams.get('id');
+  const eventName = document.getElementById('event-name').value;
+  const dateTime = document.getElementById('event-dateTime').value;
+  const location = document.getElementById('event-location').value;
+  const desc = document.getElementById('event-description').value;
+  var eventData = {
+    eventName: eventName,
+    dateTime: dateTime,
+    location: location,
+    desc: desc,
+    clubId: clubId
   };
-
-  const xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState === 4) {
-      if (this.status === 200) {
-        alert('Event created successfully');
-        window.location.reload(); // Reload the page
-      } else {
-        alert('Error creating event');
-      }
+  var req = new XMLHttpRequest();
+  req.open('POST', '/create-event');
+  req.setRequestHeader('Content-type', 'application/json');
+  req.onload = function() {
+    if (req.status === 200) {
+      alert('Event created.');
+    } else {
+      alert('Event could not be created.');
     }
   };
-
-  xhttp.open('POST', '/create_event', true);
-  xhttp.setRequestHeader('Content-Type', 'application/json');
-  xhttp.send(JSON.stringify(data));
+  req.send(JSON.stringify(eventData));
 }

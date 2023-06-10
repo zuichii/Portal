@@ -302,6 +302,33 @@ router.post('/google_login', async function (req, res, next) {
   });
 });
 
+//user updates profile
+router.post('/update_user', function(req, res, next) {
+  var updated_email = req.body.email;
+  var updated_username = req.body.username;
+  // var updated_password = req.body.password;
+
+  // Update the user's information in the database using database operations or queries
+  req.pool.getConnection(function(err, connection) {
+    if (err) {
+      return next(err);
+    }
+
+    var query = "UPDATE user SET email = ?, user_name = ? WHERE user_id = ?";
+    var values = [updated_email, updated_username, req.session.user.user_id];
+
+    connection.query(query, values, function(qerr, results) {
+      connection.release();
+
+      if (qerr) {
+        return next(qerr);
+      }
+
+      res.sendStatus(200);
+    });
+  });
+});
+
 
 router.get('/get_current_user_info', (req, res) => {
   const userId = req.session.user.user_id;
@@ -415,23 +442,20 @@ router.post('/unsubscribe', function (req, res, next) {
   });
 });
 
-router.post('/update_user', function(req, res, next) {
+router.post('/update_user', function(req,res,next) {
   const current_user = req.session.user.user_id;
   const { name, email } = req.body;
 
   req.pool.getConnection(function(err, connection) {
     if (err) {
-      res.status(500).send('Error getting database connection');
-      return;
+      res.status(500).send('error getting database connection');
     }
 
-    // Check if the new username or email already exists in the database
-    const query = 'SELECT * FROM user WHERE (user_name = ? OR email = ?) AND user_id != ?';
+    const query = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
+
     connection.query(query, [name, email, current_user], function(error, results) {
-      if (error) {
-        connection.release();
-        res.status(500).send('Error updating data');
-        return;
+      if(error){
+        res.status(500).send('error changing data');
       }
 
       if (results.length > 0) {
@@ -460,10 +484,9 @@ router.post('/update_user', function(req, res, next) {
 
       // Update the user's data
       const updateQuery = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
-      connection.query(updateQuery, [name, email, current_user], function(updateResult) {
-      connection.query(updateQuery, [name, email, current_user], function(qerror, updateResult) {
+      connection.query(updateQuery, [name, email, current_user], function(error, updateResult) {
         connection.release();
-        if (qerror) {
+        if (error) {
           res.status(500).send('Error updating data');
           return;
         }
