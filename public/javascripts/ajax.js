@@ -2,7 +2,6 @@
 function getClubProfile() {
   var urlParams = new URLSearchParams(window.location.search);
   var clubId = urlParams.get('id');
-  console.log('getClubProfile function called with clubId:', clubId);
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
@@ -27,7 +26,6 @@ window.addEventListener('DOMContentLoaded', getClubProfile);
 function loadClubPosts() {
   var urlParams = new URLSearchParams(window.location.search);
   var clubId = urlParams.get('id');
-  console.log('loadPosts function called with clubId:', clubId);
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
@@ -58,7 +56,6 @@ window.addEventListener('DOMContentLoaded', loadClubPosts);
 function loadClubEvents() {
   var urlParams = new URLSearchParams(window.location.search);
   var clubId = urlParams.get('id');
-  console.log('loadClubEvents function called with clubId:', clubId);
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
@@ -91,7 +88,6 @@ function loadClubEvents() {
 function loadClubDescription() {
   var urlParams = new URLSearchParams(window.location.search);
   var clubId = urlParams.get('id');
-  console.log('loadClubDescription function called with clubId:', clubId);
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
@@ -136,7 +132,7 @@ function signup() {
   };
   const req = new XMLHttpRequest();
   req.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
+    if (this.readyState === 4 && this.status === 200) {
       window.location.href = 'login.html';
       alert('Signed up successfully');
     } else if (this.status === 401) {
@@ -173,10 +169,10 @@ function login() {
 function logout() {
   let req = new XMLHttpRequest();
   req.onreadystatechange = function(){
-      if(this.readyState == 4 && this.status == 200){
+      if(this.readyState === 4 && this.status === 200){
           alert('Logged Out');
           window.location.href = 'home.html';
-      } else if(this.readyState == 4 && this.status == 403){
+      } else if(this.readyState === 4 && this.status === 403){
           alert('Not logged in');
       }
   };
@@ -185,15 +181,13 @@ function logout() {
 }
 
 function do_google_login(response){
-  // Sends the login token provided by google to the server for verification using an AJAX request
-  console.log(response);
   // Setup AJAX request
   let req = new XMLHttpRequest();
   req.onreadystatechange = function(){
       // Handle response from our server
-      if(req.readyState == 4 && req.status == 200){
+      if(req.readyState === 4 && req.status === 200){
           alert('Logged In with Google successfully');
-      } else if(req.readyState == 4 && req.status == 401){
+      } else if(req.readyState === 4 && req.status === 401){
           alert('Login FAILED');
       }
   };
@@ -212,7 +206,6 @@ function retrieveClubId(){
 function subscriptionToggler() {
   const button = document.getElementById('subscribe');
   const ifSubbed = button.textContent === 'Subscribe';
-  // const userId = retrieveUserId().userDetails.user_id;
   const clubId = retrieveClubId();
   const toggle = new XMLHttpRequest();
   toggle.open('POST', ifSubbed ? '/subscribe' : '/unsubscribe');
@@ -224,32 +217,35 @@ function subscriptionToggler() {
       } else {
         alert('Unsubscribed from ' + clubId);
       }
-    } else {
-      alert(ifSubbed ? 'Error subscribing.' : 'Error unsubscribing.');
+      window.location.reload(); // Reload the page
     }
   };
   toggle.send(JSON.stringify({ clubId }));
-  button.textContent = ifSubbed ? 'Unsubscribe' : 'Subscribe';
+
+  // Replace the subscribe button with unsubscribe button if the user is subscribed
+  if (ifSubbed) {
+    button.textContent = 'Unsubscribe';
+  }
 }
 
 function getUserInfo() {
-  const req = new XMLHttpRequest();
-  req.onreadystatechange = function () {
-    if (req.readyState === 4) {
-      if (req.status === 200) {
-        const userInfo = JSON.parse(req.responseText);
-        console.log(userInfo);
-        const name = userInfo.user_name;
-        const user_email = userInfo.email;
-        const nameElement = document.getElementById("name");
-        const emailElement = document.getElementById("email");
-        nameElement.innerHTML = name;
-        emailElement.innerHTML = user_email;
-      }
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState === 4 && this.status === 200) {
+      var userInfo = JSON.parse(this.responseText);
+      var name = userInfo.user_name;
+      var userEmail = userInfo.email;
+      var nameElement = document.getElementById('name');
+      var emailElement = document.getElementById('email');
+      nameElement.innerHTML = name;
+      emailElement.innerHTML = userEmail;
+
+      // Call the loadClubEvents function
+      loadClubEvents();
     }
   };
-  req.open('GET', '/get_current_user_info');
-  req.send();
+  xhttp.open('GET', '/get_current_user_info', true);
+  xhttp.send();
 }
 
 document.getElementById('updateForm').addEventListener('submit', function(event) {
@@ -268,15 +264,11 @@ document.getElementById('updateForm').addEventListener('submit', function(event)
   req.setRequestHeader('Content-Type', 'application/json');
   req.onload = function() {
     if (req.status === 200) {
-      const response = JSON.parse(req.responseText);
-      console.log(response.message);
 
       document.getElementById('name').textContent = name;
       document.getElementById('email').textContent = email;
 
       window.location.reload(); // Reload the current page
-    } else {
-      console.error('Error:', req.status);
     }
   };
 
@@ -284,30 +276,34 @@ document.getElementById('updateForm').addEventListener('submit', function(event)
   req.send(JSON.stringify(data));
 });
 
-
 function createEvent() {
-  var urlParams = new URLSearchParams(window.location.search);
-  var clubId = urlParams.get('id');
-  const eventName = document.getElementById('event-name').value;
-  const dateTime = document.getElementById('event-dateTime').value;
-  const location = document.getElementById('event-location').value;
-  const desc = document.getElementById('event-description').value;
-  var eventData = {
-    eventName: eventName,
-    dateTime: dateTime,
-    location: location,
-    desc: desc,
-    clubId: clubId
+  const event_name = document.getElementById('event-name').value;
+  const event_datetime = document.getElementById('event-dateTime').value;
+  const event_location = document.getElementById('event-location').value;
+  const event_desc = document.getElementById('event-description').value;
+  const club_id = 1; // Replace with the actual club_id value
+
+  const data = {
+    event_name: event_name,
+    event_datetime: event_datetime,
+    event_location: event_location,
+    event_desc: event_desc,
+    club_id: club_id
   };
-  var req = new XMLHttpRequest();
-  req.open('POST', '/create-event');
-  req.setRequestHeader('Content-type', 'application/json');
-  req.onload = function() {
-    if (req.status === 200) {
-      alert('Event created.');
-    } else {
-      alert('Event could not be created.');
+
+  const xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState === 4) {
+      if (this.status === 200) {
+        alert('Event created successfully');
+        window.location.reload(); // Reload the page
+      } else {
+        alert('Error creating event');
+      }
     }
   };
-  req.send(JSON.stringify(eventData));
+
+  xhttp.open('POST', '/create_event', true);
+  xhttp.setRequestHeader('Content-Type', 'application/json');
+  xhttp.send(JSON.stringify(data));
 }

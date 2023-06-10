@@ -47,7 +47,6 @@ router.get('/club_profile', function (req, res, next) {
 
   req.pool.getConnection(function(err, connection) {
     if (err) {
-      console.error('Error getting database connection:', err);
       res.status(500).send('Internal Server Error');
       return;
     }
@@ -56,7 +55,6 @@ router.get('/club_profile', function (req, res, next) {
     var clubQuery = "SELECT club_name, club_description FROM club WHERE club_id = ?";
     connection.query(clubQuery, [clubId], function(qerr, clubRows) {
       if (qerr) {
-        console.error('Error executing club query:', qerr);
         connection.release();
         res.status(500).send('Internal Server Error');
         return;
@@ -69,7 +67,6 @@ router.get('/club_profile', function (req, res, next) {
         var postsQuery = "SELECT COUNT(*) AS num_posts FROM post WHERE club_id = ?";
         connection.query(postsQuery, [clubId], function(perr, postsRows) {
           if (perr) {
-            console.error('Error executing posts query:', perr);
             connection.release();
             res.status(500).send('Internal Server Error');
             return;
@@ -86,7 +83,6 @@ router.get('/club_profile', function (req, res, next) {
           connection.query(membersQuery, [clubId], function(merr, membersRows) {
             connection.release();
             if (merr) {
-              console.error('Error executing members query:', merr);
               res.status(500).send('Internal Server Error');
               return;
             }
@@ -116,7 +112,6 @@ router.get('/get_posts', function(req, res, next) {
   var query = 'SELECT * FROM post WHERE club_id = ?';
   req.pool.query(query, [clubId], function(err, results) {
     if (err) {
-      console.error(err);
       res.status(500).json({ error: 'Failed to fetch posts.' });
     } else {
       res.json(results);
@@ -132,7 +127,6 @@ router.get('/get_events', function(req, res, next) {
   var query = 'SELECT * FROM event WHERE club_id = ?';
   req.pool.query(query, [clubId], function(err, results) {
     if (err) {
-      console.error(err);
       res.status(500).json({ error: 'Failed to fetch events.' });
     } else {
       res.json(results);
@@ -149,7 +143,6 @@ router.get('/get_club_description', function(req, res, next) {
   var query = 'SELECT * FROM club WHERE club_id = ?';
   req.pool.query(query, [clubId], function(err, results) {
     if (err) {
-      console.error(err);
       res.status(500).json({ error: 'Failed to fetch events.' });
     } else {
       var clubData = {
@@ -171,7 +164,6 @@ router.post('/createacc', function(req, res, next) {
   var query = 'SELECT * FROM user WHERE user_name = ? OR email = ?';
   req.pool.query(query, [username, email], function(error, results) {
     if (error) {
-      console.error(error);
       return res.sendStatus(500);
     }
 
@@ -198,7 +190,6 @@ router.post('/createacc', function(req, res, next) {
     // Hash the password
     bcrypt.hash(password, 10, function(err, hashedPassword) {
       if (err) {
-        console.error(err);
         return res.sendStatus(500);
       }
 
@@ -212,7 +203,6 @@ router.post('/createacc', function(req, res, next) {
       var insertquery = 'INSERT INTO user SET ?';
       req.pool.query(insertquery, newUser, function(ierror) {
         if (ierror) {
-          console.error(ierror);
           return res.sendStatus(500);
         }
 
@@ -246,13 +236,11 @@ router.post('/login', async function(req, res) {
           var user = results[0];
           bcrypt.compare(password, user.password, function(bcryptErr, isMatch) {
             if (bcryptErr) {
-              console.error(bcryptErr);
               return res.sendStatus(500);
             }
 
             if (isMatch) {
               req.session.user = user;
-              console.log("User logged in:", user.user_name);
               res.status(200).json(user);
             } else {
               res.sendStatus(401);
@@ -306,7 +294,6 @@ router.post('/google_login', async function (req, res, next) {
       if (results.length === 1) {
         var user = results[0];
         req.session.user = user;
-        console.log("User logged in:", user.user_name);
         res.json(user);
       } else {
         res.sendStatus(401);
@@ -323,12 +310,11 @@ router.get('/get_current_user_info', (req, res) => {
   req.pool.getConnection(function(err, connection) {
     connection.query(sql, (ierr, result) => {
       if (ierr) {
-        console.error('Error executing the SQL query:', ierr);
         res.sendStatus(500);
         return;
       }
 
-      if (result.length == 0) {
+      if (result.length === 0) {
         res.sendStatus(404);
       }
 
@@ -352,7 +338,6 @@ router.post('/subscribe', function (req, res, next) {
 
   req.pool.getConnection(function (error, connection) {
     if (error) {
-      console.log('Error getting database connection:', error);
       res.status(500).send('Error getting database connection');
       return;
     }
@@ -361,14 +346,12 @@ router.post('/subscribe', function (req, res, next) {
 
     connection.query(check, [userId, clubId], function (merror, results) {
       if (merror) {
-        console.log('Error checking membership:', merror);
         res.status(500).send('Error checking membership');
         connection.release(); // Release the connection back to the pool
         return;
       }
 
       if (results.length > 0) {
-        console.log('User already subscribed to the club');
         res.status(400).send('User already subscribed to the club');
         connection.release(); // Release the connection back to the pool
         return;
@@ -380,7 +363,6 @@ router.post('/subscribe', function (req, res, next) {
         connection.release(); // Release the connection back to the pool
 
         if (serror) {
-          console.log('Error inserting membership:', serror);
           res.status(500).send('Error inserting membership');
           return;
         }
@@ -398,7 +380,6 @@ router.post('/unsubscribe', function (req, res, next) {
 
   req.pool.getConnection((err, connection) => {
     if (err) {
-      console.log('error getting database connection');
       res.status(500).send('error getting database connection');
       return;
     }
@@ -407,7 +388,6 @@ router.post('/unsubscribe', function (req, res, next) {
 
     connection.query(check, [userId, clubId], (error, results) => {
       if (error) {
-        console.log('error');
         res.status(500).send('error');
         connection.release();
         return;
@@ -423,7 +403,6 @@ router.post('/unsubscribe', function (req, res, next) {
 
       connection.query(unsubscribe, [userId, clubId], (serror) => {
         if (serror) {
-          console.log('error unsubscribing user from club');
           res.status(500).send('error unsubscribing user from club');
           connection.release();
           return;
@@ -481,7 +460,7 @@ router.post('/update_user', function(req, res, next) {
 
       // Update the user's data
       const updateQuery = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
-      connection.query(updateQuery, [name, email, current_user], function(error, updateResult) {
+      connection.query(updateQuery, [name, email, current_user], function(updateResult) {
         connection.release();
         if (error) {
           res.status(500).send('Error updating data');
@@ -490,6 +469,32 @@ router.post('/update_user', function(req, res, next) {
 
         res.redirect('/dashboard.html');
       });
+    });
+  });
+});
+
+
+router.post('/create_event', function(req, res, next) {
+  const {
+    event_name, event_datetime, event_location, event_desc, club_id
+  } = req.body;
+
+  req.pool.getConnection(function(err, connection) {
+    if (err) {
+      res.status(500).send('Error getting database connection');
+      return;
+    }
+
+    const query = 'INSERT INTO events (event_name, event_datetime, event_location, event_desc, club_id) VALUES (?, ?, ?, ?, ?)';
+    connection.query(query, [event_name, event_datetime,
+      event_location, event_desc, club_id], function(error) {
+      connection.release();
+      if (error) {
+        res.status(500).send('Error creating event');
+        return;
+      }
+
+      res.sendStatus(200);
     });
   });
 });
