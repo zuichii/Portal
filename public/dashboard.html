@@ -49,20 +49,22 @@
   <main class="dashboard">
     <div class="dashboard-section">
       <h2>User Profile</h2>
-      <form id="updateForm" method="post" class="pure-form-stacked">
-        <p>Name: <span id="name"></span></p>
-        <button type="button" onclick="toggleEditField('name')">Edit Name</button>
-        <input id="name-input" type="text" class="edit-input" />
+      <form id="updateForm" method="post" action="/update_user" class="pure-form-stacked">
+        <div class="input-field">
+          <label for="name-input">Name:</label>
+          <span id="name"></span>
+          <input id="name-input" name="name" type="text" class="edit-input" />
+        </div>
 
-        <p>Email: <span id="email"></span></p>
-        <button type="button" onclick="toggleEditField('email')">Edit Email</button>
-        <input id="email-input" type="email" class="edit-input" />
+        <div class="input-field">
+          <label for="email-input">Email:</label>
+          <span id="email"></span>
+          <input id="email-input" name="email" type="email" class="edit-input" />
+        </div>
 
-        <p>Password: <span id="password"></span></p>
-        <button type="button" onclick="toggleEditField('password')">Edit Password</button>
-        <input id="password-input" type="password" class="edit-input" />
         <button type="submit">Update</button>
       </form>
+
     </div>
 
 
