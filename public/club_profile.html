@@ -1,106 +1,122 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
-<title>club profile</title>
-<meta charset="utf-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
-        integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
-<link rel="stylesheet" href="stylesheets/style.css" type="text/css"/>
-<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-<script src="javascripts/script.js" defer></script>
-<script src="javascripts/ajax.js" defer></script>
+  <title>club profile</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="stylesheets/style.css" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <script src="javascripts/script.js" defer></script>
+  <script src="javascripts/ajax.js" defer></script>
+
 </head>
-
-
 
 <body>
 
-    <header class="pure-menu pure-menu-horizontal topnav">
-        <div class="pure-menu pure-menu-horizontal topnav-left">
-            <a href="home.html" class="pure-menu-heading logo"><img src="images/tree.jpg" alt="Home logo"></a>
-        </div>
-
-        <ul class="pure-menu-list topnav-right">
-            <li class="pure-menu-item">
-                <a href="explore_clubs.html">Clubs</a>
-            </li>
-            <li class="pure-menu-item">
-                <a href="explore_events.html">Events</a>
-            </li>
-            <li class="pure-menu-item">
-                <a href="about.html">About</a>
-            </li>
-
-            <li class="pure-menu-item">
-                <a href="dashboard.html">Dashboard</a>
-            </li>
-
-            <li class="pure-menu-item">
-                <form class="pure-form">
-                    <input type="text" class="pure-input-rounded" />
-
-                </form>
-            </li>
-            <li class="pure-menu-item">
-                <a class="pure-button pure-button-primary" href="login.html">Login</a>
-            </li>
-
-        </ul>
-    </header>
-
-
-    <div class="clubHero">
-        <div class="heroSocials">
-            <p>@Google@Facebook@Instagram</p>
-        </div>
+  <header class="pure-menu pure-menu-horizontal topnav">
+    <div class="pure-menu pure-menu-horizontal topnav-left">
+      <a href="home.html" class="pure-menu-heading logo"><img src="images/tree.jpg" alt="Home logo"></a>
     </div>
 
+    <ul class="pure-menu-list topnav-right">
+      <li class="pure-menu-item">
+        <a href="explore_clubs.html">Clubs</a>
+      </li>
+      <li class="pure-menu-item">
+        <a href="explore_events.html">Events</a>
+      </li>
+      <li class="pure-menu-item">
+        <a href="about.html">About</a>
+      </li>
 
-    <div class="clubProfile">
-        <div>
-            <img src="images/placeholder.jpg" alt="clublogo" id="clubLogo">
+      <li class="pure-menu-item">
+        <a href="dashboard.html">Dashboard</a>
+      </li>
+
+      <li class="pure-menu-item">
+        <form class="pure-form">
+          <input type="text" class="pure-input-rounded" />
+
+        </form>
+      </li>
+      <li class="pure-menu-item">
+        <a class="pure-button pure-button-primary" href="login.html">Login</a>
+      </li>
+
+    </ul>
+  </header>
+
+
+  <div class="clubHero">
+    <div class="heroSocials">
+      <p>@Google@Facebook@Instagram</p>
+    </div>
+  </div>
+
+
+  <div class="clubProfile">
+    <div>
+      <img src="images/placeholder.jpg" alt="clublogo" id="clubLogo">
+    </div>
+    <div>
+      <h3 id="clubName">&nbsp;</h3>
+      <h5 id="clubStats">&nbsp;</h5>
+    </div>
+    <div class="subscribe_button">
+      <a id="subscribe" class="pure-button" onclick="subscriptionToggler()">Subscribe</a>
+    </div>
+
+  </div>
+  <hr>
+  <div class="pure-menu pure-menu-horizontal clubProfileMenu">
+    <ul class="pure-menu-list">
+      <li class="pure-menu-item">
+        <a href="#" class="pure-menu-link" onclick="loadClubPosts()">Posts</a>
+      </li>
+      <li class="pure-menu-item">
+        <a href="#" class="pure-menu-link" onclick="loadClubEvents()">Events</a>
+      </li>
+      <li class="pure-menu-item">
+        <a href="#" class="pure-menu-link" onclick="loadClubDescription()">Description</a>
+      </li>
+    </ul>
+  </div>
+  <main>
+
+    <div id="clubContent" style="margin:auto">
+      &nbsp;
+    </div>
+    <br><br>
+    <div class="dashboard-section">
+      <h2>Create Event</h2>
+      <form id="create-event-form" class="pure-form-stacked" onsubmit="createEvent(); return false;">
+        <div class="input-field">
+          <label for="event-name">Event Name:</label>
+          <input type="text" id="event-name" name="event_name" class="edit-input" required>
         </div>
-        <div>
-            <h3 id="clubName">&nbsp;</h3>
-            <h5 id="clubStats">&nbsp;</h5>
+        <div class="input-field">
+          <label for="event-dateTime">Event Date and Time:</label>
+          <input type="datetime-local" id="event-dateTime" name="event_datetime" class="edit-input" required>
         </div>
-        <div class="subscribe_button">
-            <a id="subscribe" class="pure-button" onclick="subscriptionToggler()">Subscribe</a>
+        <div class="input-field">
+          <label for="event-location">Event Location:</label>
+          <input type="text" id="event-location" name="event_location" class="edit-input" required>
         </div>
+        <div class="input-field">
+          <label for="event-description">Event Description:</label>
+          <textarea id="event-description" name="event_desc" class="edit-input" required></textarea>
+        </div>
+        <button type="submit">Create Event</button>
+      </form>
+
 
     </div>
-    <hr>
-    <div class="pure-menu pure-menu-horizontal clubProfileMenu">
-        <ul class="pure-menu-list">
-            <li class="pure-menu-item">
-                <a href="#" class="pure-menu-link" onclick="loadClubPosts()">Posts</a>
-            </li>
-            <li class="pure-menu-item">
-                <a href="#" class="pure-menu-link" onclick="loadClubEvents()">Events</a>
-            </li>
-            <li class="pure-menu-item">
-                <a href="#" class="pure-menu-link" onclick="loadClubDescription()">Description</a>
-            </li>
-        </ul>
-    </div>
-    <main>
 
-        <div id="clubContent" style="margin:auto">
-            &nbsp;
-        </div>
-        <br><br>
-        <form id="create-event-form" class="pure-form-stacked" onsubmit="event.preventDefault(); createEvent();">
-            <input type="text" id="event-name" placeholder="Event Name" required>
-            <input type="date" id="event-dateTime" required>
-            <input type="text" id="event-location" placeholder="Location" required>
-            <textarea id="event-description" placeholder="Description" required></textarea>
-            <button type="submit">Create Event</button>
-          </form>
-    </main>
+  </main>
 
 </body>
-
 
 </html>
