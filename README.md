@@ -16,4 +16,7 @@ To operate this code, the following node modules must be installed:
 - mysql
 - google-auth-library
 
-
+For the database, load in bitl5.sql into mysql by:
+1. Changing the directory to db
+2. Load in the database bitl5.sql
+3. Start the server
