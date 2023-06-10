@@ -315,33 +315,6 @@ router.post('/google_login', async function (req, res, next) {
   });
 });
 
-//user updates profile
-router.post('/update_user', function(req, res, next) {
-  var updated_email = req.body.email;
-  var updated_username = req.body.username;
-  // var updated_password = req.body.password;
-
-  // Update the user's information in the database using database operations or queries
-  req.pool.getConnection(function(err, connection) {
-    if (err) {
-      return next(err);
-    }
-
-    var query = "UPDATE user SET email = ?, user_name = ? WHERE user_id = ?";
-    var values = [updated_email, updated_username, req.session.user.user_id];
-
-    connection.query(query, values, function(qerr, results) {
-      connection.release();
-
-      if (qerr) {
-        return next(qerr);
-      }
-
-      res.sendStatus(200);
-    });
-  });
-});
-
 
 router.get('/get_current_user_info', (req, res) => {
   const userId = req.session.user.user_id;
@@ -463,60 +436,62 @@ router.post('/unsubscribe', function (req, res, next) {
   });
 });
 
-router.post('/update_user', function(req,res,next) {
+router.post('/update_user', function(req, res, next) {
   const current_user = req.session.user.user_id;
   const { name, email } = req.body;
 
   req.pool.getConnection(function(err, connection) {
     if (err) {
-      res.status(500).send('error getting database connection');
-    }
-
-    const query = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
-
-    connection.query(query, [name, email, current_user], function(error, results) {
-      if(error){
-        res.status(500).send('error changing data');
-      }
-      res.sendStatus(200);
-    });
-  });
-});
-
-router.get('/user/events', function (req, res) {
-  const userId = req.session.userId;
-
-  const query = `
-    SELECT e.event_name, e.event_date
-    FROM events e
-    INNER JOIN club_membership m ON e.club_id = m.club_id
-    WHERE m.user_id = ?;
-  `;
-
-  req.pool.getConnection(function (err, connection) {
-    if (err) {
-      console.log('Error getting database connection:', err);
       res.status(500).send('Error getting database connection');
       return;
     }
 
-    connection.query(query, [userId], function (error, results) {
-      connection.release(); // Release the connection back to the pool
-
+    // Check if the new username or email already exists in the database
+    const query = 'SELECT * FROM user WHERE (user_name = ? OR email = ?) AND user_id != ?';
+    connection.query(query, [name, email, current_user], function(error, results) {
       if (error) {
-        console.log('Error fetching events:', error);
-        res.status(500).send('Error fetching events');
+        connection.release();
+        res.status(500).send('Error updating data');
         return;
       }
 
-      res.json(results);
+      if (results.length > 0) {
+        // Check if the username is already taken
+        const isUsernameTaken = results.some(function(user) {
+          return user.user_name === name;
+        });
+
+        if (isUsernameTaken) {
+          connection.release();
+          res.status(401).send('Username is already taken');
+          return;
+        }
+
+        // Check if the email is already taken
+        const isEmailTaken = results.some(function(user) {
+          return user.email === email;
+        });
+
+        if (isEmailTaken) {
+          connection.release();
+          res.status(402).send('Email is already taken');
+          return;
+        }
+      }
+
+      // Update the user's data
+      const updateQuery = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
+      connection.query(updateQuery, [name, email, current_user], function(error, updateResult) {
+        connection.release();
+        if (error) {
+          res.status(500).send('Error updating data');
+          return;
+        }
+
+        res.redirect('/dashboard.html');
+      });
     });
   });
 });
-
-
-
-
-
 
 module.exports = router;

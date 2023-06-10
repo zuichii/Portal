@@ -19,3 +19,11 @@ cd ..
 
 -TO EXPORT A DATABASE USE COMMAND
 'mysqldump --databases bitl > bitl.sql'
+
+
+
+
+
+
+
+PLEASE 
