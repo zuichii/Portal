@@ -16,30 +16,6 @@ router.get('/', function (req, res, next) {
 });
 
 
-// signin post request
-// router.post('/signin', function(req, res) {
-//   req.pool.getConnection(function(err, connection) {
-//     if(err){
-//       res.sendStatus(500);
-//       return;
-//     }
-//     var username = req.body.username;
-//     var password = req.body.password;
-//     var query = "SELECT * FROM user WHERE user_name = ? AND password = ?";
-//     connection.query(query, [username, password], function(qerr, results) {
-//       connection.release();
-//       if(qerr){
-//         res.sendStatus(500);
-//         return;
-//       }
-//       if(results.length === 1){
-//         res.sendStatus(200);
-//       } else {
-//         res.sendStatus(401);
-//       }
-//     });
-//   });
-// });
 
 
 router.get('/club_profile', function (req, res, next) {
@@ -55,6 +31,7 @@ router.get('/club_profile', function (req, res, next) {
     var clubQuery = "SELECT club_name, club_description FROM club WHERE club_id = ?";
     connection.query(clubQuery, [clubId], function(qerr, clubRows) {
       if (qerr) {
+
         connection.release();
         res.status(500).send('Internal Server Error');
         return;
@@ -208,9 +185,7 @@ router.post('/createacc', function(req, res, next) {
 
         return res.sendStatus(200);
       });
-    return res.sendStatus(200);
     });
-  return res.sendStatus(404);
   });
 });
 
@@ -243,9 +218,10 @@ router.post('/login', async function(req, res) {
 
             if (isMatch) {
               req.session.user = user;
-              return res.status(200).json(user);
+              res.status(200).json(user);
+            } else {
+              res.sendStatus(401);
             }
-            return res.sendStatus(401);
           });
         } else {
           res.sendStatus(401);
@@ -300,34 +276,6 @@ router.post('/google_login', async function (req, res, next) {
         res.sendStatus(401);
       }
     });
-  });
-});
-
-// user updates profile
-router.post('/update_user', function(req, res, next) {
-  var updated_email = req.body.email;
-  var updated_username = req.body.username;
-  // var updated_password = req.body.password;
-
-  // Update the user's information in the database using database operations or queries
-  req.pool.getConnection(function(err, connection) {
-    if (err) {
-      return next(err);
-    }
-
-    var query = "UPDATE user SET email = ?, user_name = ? WHERE user_id = ?";
-    var values = [updated_email, updated_username, req.session.user.user_id];
-
-    connection.query(query, values, function(qerr, results) {
-      connection.release();
-
-      if (qerr) {
-        return next(qerr);
-      }
-
-      return res.sendStatus(200);
-    });
-    return res.sendStatus(200);
   });
 });
 
@@ -444,25 +392,64 @@ router.post('/unsubscribe', function (req, res, next) {
   });
 });
 
-router.post('/update_user', function(req,res,next) {
+router.post('/update_user', function(req, res, next) {
   const current_user = req.session.user.user_id;
   const { name, email } = req.body;
 
   req.pool.getConnection(function(err, connection) {
     if (err) {
-      res.status(500).send('error getting database connection');
+      res.status(500).send('Error getting database connection');
+      return;
     }
 
-    const query = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
-
+    // Check if the new username or email already exists in the database
+    const query = 'SELECT * FROM user WHERE (user_name = ? OR email = ?) AND user_id != ?';
     connection.query(query, [name, email, current_user], function(error, results) {
-      if(error){
-        res.status(500).send('error changing data');
+      if (error) {
+        connection.release();
+        res.status(500).send('Error updating data');
+        return;
       }
-      res.sendStatus(200);
+
+      if (results.length > 0) {
+        // Check if the username is already taken
+        const isUsernameTaken = results.some(function(user) {
+          return user.user_name === name;
+        });
+
+        if (isUsernameTaken) {
+          connection.release();
+          res.status(401).send('Username is already taken');
+          return;
+        }
+
+        // Check if the email is already taken
+        const isEmailTaken = results.some(function(user) {
+          return user.email === email;
+        });
+
+        if (isEmailTaken) {
+          connection.release();
+          res.status(402).send('Email is already taken');
+          return;
+        }
+      }
+
+      // Update the user's data
+      const updateQuery = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
+      connection.query(updateQuery, [name, email, current_user], function(qerror, updateResult) {
+        connection.release();
+        if (qerror) {
+          res.status(500).send('Error updating data');
+          return;
+        }
+
+        res.redirect('/dashboard.html');
+      });
     });
   });
 });
+
 
 
 router.post('/create_event', function(req, res, next) {
@@ -489,5 +476,9 @@ router.post('/create_event', function(req, res, next) {
     });
   });
 });
+
+
+
+
 
 module.exports = router;

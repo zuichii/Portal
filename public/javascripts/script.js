@@ -23,6 +23,7 @@ function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
+// rsvp button
 const rsvpButton = document.getElementById('rsvp-button');
 const rsvpOptions = document.getElementsById('rsvp-options');
 
@@ -30,8 +31,7 @@ rsvpButton.addEventListener('click', () => {
     rsvpOptions.classList.toggle('hidden');
 });
 
-// dashboard stuff
-
+// toggles for displaying user information on dashboard
 function toggleEditField(fieldId) {
     var textField = document.getElementById(fieldId);
     var inputField = document.getElementById(fieldId + "-input");
@@ -45,6 +45,7 @@ function toggleEditField(fieldId) {
     }
 }
 
+// function to remove club_id
 function removeClub(clubId) {
     var club = document.getElementById(clubId);
     club.parentNode.removeChild(club);

@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 
-
+// middleware for session
 app.use(session({
   resave: false,
   saveUninitialized: true,

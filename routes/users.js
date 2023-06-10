@@ -7,8 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 
-
-
+// route to create event
 router.post('/create-event', (req, res, next) => {
   const {
     eventName,
