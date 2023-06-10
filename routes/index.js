@@ -481,9 +481,9 @@ router.post('/update_user', function(req, res, next) {
 
       // Update the user's data
       const updateQuery = 'UPDATE user SET user_name = ?, email = ? WHERE user_id = ?';
-      connection.query(updateQuery, [name, email, current_user], function(error, updateResult) {
+      connection.query(updateQuery, [name, email, current_user], function(qerror, updateResult) {
         connection.release();
-        if (error) {
+        if (qerror) {
           res.status(500).send('Error updating data');
           return;
         }
